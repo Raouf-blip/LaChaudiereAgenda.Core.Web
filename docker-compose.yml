@@ -50,7 +50,7 @@ services:
   app:
     build:
       context: build
-      dockerfile: sae.Dockerfile
+      dockerfile: sae.DockerFile
     ports:
       - "10000:80"
     volumes:
