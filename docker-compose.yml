@@ -1,67 +1,67 @@
-  networks:
-    sae.net:
-      driver: bridge
+networks:
+  sae.net:
+    driver: bridge
 
-  services:
-    mysql-db:
-      image: mysql:8.0
-      container_name: mysql-chaudiere
-      restart: unless-stopped
-      ports:
-        - "10002:3306"
-      environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: lachaudiere
-      volumes:
-        - mysql_data:/var/lib/mysql
-      networks:
-        - sae.net
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-chaudiere
+    restart: unless-stopped
+    ports:
+      - "${MYSQL_PORT}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - sae.net
 
-    db-init:
-      image: mysql:8.0
-      depends_on:
-        - mysql-db
-      entrypoint: |
-        sh -c "
-        sleep 20 && \
-        mysql -h mysql-db -u root -proot lachaudiere < /sql/schema.sql && \
-        mysql -h mysql-db -u root -proot lachaudiere < /sql/data.sql
-        "
-      volumes:
-        - ./db:/sql
-      networks:
-        - sae.net
+  db-init:
+    image: mysql:8.0
+    depends_on:
+      - mysql-db
+    entrypoint: |
+      sh -c "
+      sleep 20 && \
+      mysql -h mysql-db -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /sql/schema.sql && \
+      mysql -h mysql-db -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /sql/data.sql
+      "
+    volumes:
+      - ./db:/sql
+    networks:
+      - sae.net
 
-    phpmyadmin:
-      image: phpmyadmin/phpmyadmin
-      container_name: phpmyadmin-chaudiere
-      restart: unless-stopped
-      ports:
-        - "10001:80"
-      environment:
-        PMA_HOST: mysql-db
-        PMA_USER: root
-        PMA_PASSWORD: root
-      depends_on:
-        - mysql-db
-      networks:
-        - sae.net
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-chaudiere
+    restart: unless-stopped
+    ports:
+      - "${PHPMYADMIN_PORT}:80"
+    environment:
+      PMA_HOST: ${PMA_HOST}
+      PMA_USER: ${PMA_USER}
+      PMA_PASSWORD: ${PMA_PASSWORD}
+    depends_on:
+      - mysql-db
+    networks:
+      - sae.net
 
-    app:
-      build:
-        context: . # Utilisation de la racine du projet
-        dockerfile: Dockerfile
-      ports:
-        - "10000:80"
-      volumes:
-        - ./:/var/www/html # Le répertoire de l'application est monté dans /var/www/html
-        - ./public/img:/var/www/html/public/img # Si nécessaire, pour les images
-      working_dir: /var/www/html # Travailler dans /var/www/html
-      networks:
-        - sae.net
-      depends_on:
-        - mysql-db
-      command: sh -c "composer install && php -S 0.0.0.0:80 -t /var/www/html/public"
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${APP_PORT}:80"
+    volumes:
+      - ./:/var/www/html
+      - ./public/img:/var/www/html/public/img
+    working_dir: /var/www/html
+    networks:
+      - sae.net
+    depends_on:
+      - mysql-db
+    command: sh -c "composer install && php -S 0.0.0.0:80 -t /var/www/html/public"
 
-  volumes:
-    mysql_data:
+volumes:
+  mysql_data:
