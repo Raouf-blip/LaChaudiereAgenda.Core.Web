@@ -2,8 +2,8 @@
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Chaudiere\entities\Events;
-use Chaudiere\entities\Categories;
+use Chaudiere\core\domain\entities\Events;
+use Chaudiere\core\domain\entities\Categories;
 
 // gerer les réponses JSON
 function jsonResponse(Response $response, $data, int $status = 200): Response {
@@ -31,7 +31,28 @@ $app->get('/api/evenements/{id}', function (Request $request, Response $response
 
 // events publiés
 $app->get('/api/evenements', function (Request $request, Response $response) {
-    $events = Events::where('is_published', true)->with('category')->get()->map(function ($e) {
+    $params = $request->getQueryParams();
+
+    $query = Events::where('is_published', true)->with('category');
+
+    // Tri 
+    $sort = $params['sort'] ?? null;
+    switch ($sort) {
+        case 'date-asc':
+            $query->orderBy('start_date', 'asc');
+            break;
+        case 'date-desc':
+            $query->orderBy('start_date', 'desc');
+            break;
+        case 'titre':
+            $query->orderBy('title', 'asc');
+            break;
+        case 'categorie':
+            $query->orderBy('category_id', 'asc');
+            break;
+    }
+
+    $events = $query->get()->map(function ($e) {
         return [
             'id' => $e->id,
             'title' => $e->title,

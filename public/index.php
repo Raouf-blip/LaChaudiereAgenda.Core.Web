@@ -13,6 +13,6 @@ $app = AppFactory::create();
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, true, true);
 
-require __DIR__ . '/../src/routes/api.php';
+require __DIR__ . '/../src/config/routes/api.php';
 
 $app->run();

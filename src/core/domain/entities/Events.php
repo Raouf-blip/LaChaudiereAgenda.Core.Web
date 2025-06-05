@@ -1,6 +1,6 @@
 <?php
 
-namespace Chaudiere\entities;
+namespace Chaudiere\core\domain\entities;
 
 use Illuminate\Database\Eloquent\Model;
 

@@ -28,7 +28,7 @@ services:
       mysql -h mysql-db -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /sql/data.sql
       "
     volumes:
-      - ./db:/sql
+      - ./src/db:/sql
     networks:
       - sae.net
 
