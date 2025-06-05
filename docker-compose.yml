@@ -5,13 +5,13 @@ networks:
 services:
   mysql-db:
     image: mysql:8.0
-    container_name: mysql
+    container_name: mysql-chaudiere
     restart: unless-stopped
     ports:
       - "10002:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: giftbox
+      MYSQL_DATABASE: lachaudiere
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -34,7 +34,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
+    container_name: phpmyadmin-chaudiere
     restart: unless-stopped
     ports:
       - "10001:80"
@@ -49,19 +49,19 @@ services:
 
   app:
     build:
-      context: build
-      dockerfile: sae.Dockerfile
+      context: . # Utilisation de la racine du projet
+      dockerfile: Dockerfile
     ports:
       - "10000:80"
     volumes:
-      - ./:/var/php
-      - ./public/img:/var/php/public/img
-    working_dir: /var/php
+      - ./:/var/www/html # Le répertoire de l'application est monté dans /var/www/html
+      - ./public/img:/var/www/html/public/img # Si nécessaire, pour les images
+    working_dir: /var/www/html # Travailler dans /var/www/html
     networks:
       - sae.net
     depends_on:
       - mysql-db
-    command: sh -c "composer install && php -S 0.0.0.0:80 -t /var/php/public"
+    command: sh -c "composer install && php -S 0.0.0.0:80 -t /var/www/html/public"
 
 volumes:
   mysql_data:

@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS LaChaudiereBD;
-USE LaChaudiereBD;
+CREATE DATABASE IF NOT EXISTS lachaudiere;
+USE lachaudiere;
 
 -- Table des utilisateurs
 CREATE TABLE users (
