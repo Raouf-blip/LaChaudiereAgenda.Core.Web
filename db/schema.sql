@@ -11,7 +11,7 @@ CREATE TABLE users (
 
 -- Table des catégories
 CREATE TABLE categories (
-    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
@@ -22,8 +22,8 @@ CREATE TABLE events (
     description TEXT NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-    start_time TIME NULLABLE,
-    end_time TIME NULLABLE,
+    start_time TIME,
+    end_time TIME,
     price DECIMAL(100,2),
     image_id VARCHAR(255),
     category_id INT NOT NULL,
