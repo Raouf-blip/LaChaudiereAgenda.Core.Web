@@ -1,0 +1,1 @@
+# LaChaudiereAgenda.Core
