@@ -3,18 +3,16 @@
 namespace Chaudiere\entities;
 
 use Illuminate\Database\Eloquent\Model;
-use Chaudiere\entities\Events;
 
-class Categories extends Models {
+class Categories extends Model {
 
     protected $table = 'categories';
     protected $primaryKey = 'id';
-
     public $timestamps = false;
 
-    protected $keyType = 'string';
+    protected $keyType = 'int';
 
     public function events() {
-        return $this->hasMany(Events::class, 'id', 'name');
+        return $this->hasMany(Events::class, 'category_id', 'id');
     }
 }

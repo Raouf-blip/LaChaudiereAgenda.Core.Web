@@ -61,7 +61,7 @@ services:
       - sae.net
     depends_on:
       - mysql-db
-    command: sh -c "composer install && php -S 0.0.0.0:80 -t /var/www/html/public"
+    command: php -S 0.0.0.0:80 -t /var/www/html/public /var/www/html/public/router.php
 
 volumes:
   mysql_data:

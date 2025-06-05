@@ -34,6 +34,7 @@ CREATE TABLE events (
     image_id CHAR(36),
     category_id INT NOT NULL,
     created_by CHAR(36),
+    is_published BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (image_id) REFERENCES images(id),
     FOREIGN KEY (category_id) REFERENCES categories(id),
     FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
