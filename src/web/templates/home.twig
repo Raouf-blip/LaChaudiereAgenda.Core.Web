@@ -1,19 +1,6 @@
 {% extends "layout.twig" %}
 
 {% block content %}
-    <h2>Événements du mois</h2>
-    {% if events %}
-        <ul>
-            {% for event in events %}
-                <li>
-                    <h3>{{ event.title }}</h3>
-                    <p><strong>Artiste :</strong> {{ event.artist }}</p>
-                    <p><strong>Date :</strong> {{ event.date|date("d/m/Y") }}</p>
-                    <p><strong>Catégorie :</strong> {{ event.category }}</p>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Aucun événement prévu pour ce mois.</p>
-    {% endif %}
+    <h2>Bienvenue à La Chaudière</h2>
+    <p>Utilisez la navigation pour explorer le calendrier et la liste des événements.</p>
 {% endblock %}
