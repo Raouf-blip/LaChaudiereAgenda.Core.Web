@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Chaudière Agenda</title>
+    <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+<header>
+    <h1>La Chaudière Agenda</h1>
+</header>
 
+<main>
+    <section id="categories">
+        <h2>Evènements courants</h2>
+        <div id="categorie-list">Chargement...</div>
+    </section>
+
+    <section id="evenements" style="display:none;">
+        <h2>Événements</h2>
+        <div id="evenement-list"></div>
+    </section>
+
+    <section id="details" style="display:none;">
+        <h2>Détails</h2>
+        <div id="evenement-details"></div>
+    </section>
+</main>
+
+<script type="module" src="js/app.js"></script>
 </body>
 </html>
