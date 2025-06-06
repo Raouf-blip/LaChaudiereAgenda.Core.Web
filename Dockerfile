@@ -1,13 +1,22 @@
-FROM php:8.2-cli
+# Use an official PHP runtime as a base image
+FROM php:8.4-cli
 
-RUN apt-get update && apt-get install -y \
-    git unzip curl mariadb-client libzip-dev libonig-dev \
-    && docker-php-ext-install pdo pdo_mysql
+# basic update
+RUN apt-get update && \
+    apt-get install --yes --force-yes \
+    cron openssl
 
-RUN curl -sS https://getcomposer.org/installer | php && \
-    mv composer.phar /usr/local/bin/composer
+# installing the docker php extensions installer
+RUN curl -sSLf \
+        -o /usr/local/bin/install-php-extensions \
+        https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
+    chmod +x /usr/local/bin/install-php-extensions
 
-COPY . /var/www/html
-WORKDIR /var/www/html
-
+# PHP Configuration
+RUN install-php-extensions  gettext iconv intl  tidy zip sockets
+RUN install-php-extensions  pgsql mysqli
+RUN install-php-extensions  pdo_mysql pdo_pgsql
+# RUN install-php-extensions  xdebug
+# RUN install-php-extensions  redis
+RUN install-php-extensions @composer
 EXPOSE 80

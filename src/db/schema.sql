@@ -6,7 +6,7 @@ CREATE TABLE users (
     id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     email VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    role VARCHAR(10) NOT NULL
+    role INT NOT NULL
 );
 
 -- Table des catégories
@@ -25,6 +25,7 @@ CREATE TABLE images (
 CREATE TABLE events (
     id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     title VARCHAR(100) NOT NULL,
+    artist VARCHAR(100),
     description TEXT NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
