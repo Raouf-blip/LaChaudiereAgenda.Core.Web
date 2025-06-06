@@ -3,7 +3,9 @@
     "slim/slim": "^4.12",
     "slim/psr7": "^1.6",
     "illuminate/database": "^10.0",
-    "vlucas/phpdotenv": "^5.5"
+    "vlucas/phpdotenv": "^5.5",
+    "slim/twig-view": "^3.0",
+    "twig/twig": "^3.21"
   },
   "autoload": {
     "psr-4": {
