@@ -20,6 +20,32 @@ $app->get('/api/categories', function (Request $request, Response $response) {
     return jsonResponse($response, $categories);
 });
 
+// events du mois
+$app->get('/api/evenements/mois', function (Request $request, Response $response) {
+    $now = new DateTime();
+    $month = $now->format('m');
+    $year = $now->format('Y');
+
+    $events = Events::where('is_published', true)
+        ->whereMonth('start_date', $month)
+        ->whereYear('start_date', $year)
+        ->with('category')
+        ->get()
+        ->map(function ($e) {
+            return [
+                'id' => $e->id,
+                'title' => $e->title,
+                'artist' => $e->artist,
+                'start_date' => $e->start_date,
+                'end_date' => $e->end_date,
+                'category' => $e->category->name ?? null,
+                'url' => "/api/evenements/{$e->id}"
+            ];
+        });
+
+    return jsonResponse($response, $events);
+});
+
 // détails d'un event
 $app->get('/api/evenements/{id}', function (Request $request, Response $response, array $args) {
     $event = Events::with('category')->find($args['id']);
