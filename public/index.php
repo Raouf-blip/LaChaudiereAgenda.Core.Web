@@ -20,7 +20,7 @@ $app = AppFactory::create();
 $app->add(CorsMiddleware::class);
 
 // Configuration de Twig
-$twig = Twig::create(__DIR__ . '/../web', ['cache' => false]);
+$twig = Twig::create(__DIR__ . '/../src/web', ['cache' => false]);
 $app->add(TwigMiddleware::create($app, $twig));
 
 $app->add(function ($request, $handler) {
@@ -36,8 +36,8 @@ $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, true, true);
 
 // Routes
-(require __DIR__ . '/../src/routes/api.php')($app);
-(require __DIR__ . '/../src/routes/admin.php')($app);
+(require __DIR__ . '/../src/config/routes/api.php')($app);
+(require __DIR__ . '/../src/config/routes/admin.php')($app);
 
 $app->options('/{routes:.+}', function ($request, $response) {
     return $response;
