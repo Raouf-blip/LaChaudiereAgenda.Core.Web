@@ -14,6 +14,14 @@ function jsonResponse(Response $response, $data, int $status = 200): Response {
         ->withHeader('Access-Control-Allow-Origin', '*');
 }
 
+$app->add(function ($request, $handler) {
+    $response = $handler->handle($request);
+    return $response
+        ->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+});
+
 // liste catégories
 $app->get('/api/categories', function (Request $request, Response $response) {
     $categories = Categories::all();
