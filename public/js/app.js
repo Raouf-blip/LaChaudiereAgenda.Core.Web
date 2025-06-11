@@ -1,43 +1,33 @@
-import {
-  loadCategories,
-  loadEventsByCategory,
-  loadCurrentEvents,
-  loadEvents,
-  loadEventDetails,
-} from "./api.js";
+import { loadCategories, loadEventsByCategory, loadEvents } from "./api.js";
+import { displayEvents, displayFavorites, displayEventDetails } from "./ui.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  await displayCategories(); // fonctionnalité 3
-  await setupCategoryFilter(); // fonctionnalité 2
+  await setupEventListeners();
+  await displayCategories();
+  await setupCategoryFilter();
   await setupSortOptions();
   const events = await loadEvents();
   displayEvents(events);
+  displayFavorites();
 });
 
-function displayEvents(events) {
-  const container = document.getElementById("events-list");
-  container.innerHTML = "";
+async function setupEventListeners() {
+  const showFavoritesBtn = document.getElementById("show-favorites");
+  const hideFavoritesBtn = document.getElementById("hide-favorites");
+  const eventsSection = document.getElementById("evenements");
+  const favoritesSection = document.getElementById("favoris");
 
-  if (!events.length) {
-    container.textContent = "Aucun événement ne correspond à votre recherche.";
-    return;
-  }
+  showFavoritesBtn.addEventListener("click", () => {
+    eventsSection.style.display = "none";
+    favoritesSection.style.display = "block";
+  });
 
-  events.forEach((event) => {
-    const item = document.createElement("li");
-    item.textContent = `${event.title} – ${new Date(
-      event.start_date
-    ).toLocaleDateString()} – ${event.category}`;
-    const btn = document.createElement("button");
-    btn.textContent = "Détails";
-    btn.addEventListener("click", () => displayEventDetails(event.id));
-
-    item.appendChild(btn);
-    container.appendChild(item);
+  hideFavoritesBtn.addEventListener("click", () => {
+    eventsSection.style.display = "block";
+    favoritesSection.style.display = "none";
   });
 }
 
-// Fonctionnalité 2 : filtre par catégorie via <select>
 async function setupCategoryFilter() {
   const select = document.getElementById("category-filter");
   if (!select) return;
@@ -52,16 +42,15 @@ async function setupCategoryFilter() {
 
   select.addEventListener("change", async (e) => {
     const categoryId = e.target.value;
+    const sort = document.getElementById("sort-options").value;
     const container = document.getElementById("events-list");
     container.innerHTML = "Chargement...";
 
     let events;
     if (!categoryId) {
-      // Si aucune catégorie sélectionnée, charger tous les événements
-      events = await loadEvents();
+      events = await loadEvents({ sort });
     } else {
-      // Charger les événements par catégorie
-      events = await loadEventsByCategory(categoryId);
+      events = await loadEventsByCategory(categoryId, sort);
     }
 
     displayEvents(events);
@@ -89,7 +78,6 @@ async function setupSortOptions() {
   });
 }
 
-// Fonctionnalité 3 : liste des catégories cliquables
 async function displayCategories() {
   const container = document.getElementById("categorie-list");
   const categories = await loadCategories();
@@ -107,67 +95,13 @@ async function displayCategories() {
     container.appendChild(div);
 
     div.addEventListener("click", async () => {
-      const eventsContainer = document.getElementById("events-list"); // C’est le bon UL dans la section "Événements"
-
-      // 🟢 Afficher la bonne section
+      const eventsContainer = document.getElementById("events-list");
       document.getElementById("evenements").style.display = "block";
       document.getElementById("details").style.display = "none";
-
+      document.getElementById("favoris").style.display = "none";
       eventsContainer.innerHTML = "Chargement...";
-
-      const events = await loadEventsByCategory(cat.id, "courante");
-
-      if (!events.length) {
-        eventsContainer.textContent = "Aucun événement pour cette catégorie.";
-        return;
-      }
-
-      eventsContainer.innerHTML = "";
-
-      events.forEach((event) => {
-        const item = document.createElement("li");
-        item.textContent = `${event.title} – ${event.artist} – ${new Date(
-          event.start_date
-        ).toLocaleDateString()} – ${event.category}`;
-
-        const btn = document.createElement("button");
-        btn.textContent = "Détails";
-        btn.addEventListener("click", () => displayEventDetails(event.id));
-
-        item.appendChild(btn);
-        eventsContainer.appendChild(item);
-      });
+      const events = await loadEventsByCategory(cat.id);
+      displayEvents(events);
     });
   });
-}
-
-// Fonctionnalité 4 : détails d'un événement
-async function displayEventDetails(id) {
-  const container = document.getElementById("evenement-details");
-  const section = document.getElementById("details");
-  const list = document.getElementById("evenements");
-
-  container.textContent = "Chargement...";
-  section.style.display = "block";
-  list.style.display = "none";
-
-  const event = await loadEventDetails(id);
-  if (!event) {
-    container.textContent = "Erreur lors du chargement.";
-    return;
-  }
-
-  container.textContent = `${event.title} - ${event.artist} - ${new Date(
-    event.start_date
-  ).toLocaleDateString()} - ${event.category.name} - ${event.description}`;
-
-  const btn = document.createElement("button");
-  btn.textContent = "Retour";
-  btn.addEventListener("click", () => {
-    section.style.display = "none";
-    list.style.display = "block";
-  });
-
-  container.appendChild(document.createElement("br"));
-  container.appendChild(btn);
 }

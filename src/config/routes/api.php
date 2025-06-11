@@ -49,7 +49,7 @@ return function($app) {
     $app->get('/api/evenements', function (Request $request, Response $response) {
         $params = $request->getQueryParams();
 
-        $query = Events::where('is_published', true)->with('category');
+        $query = Events::where('is_published', true)->with('category', 'image');
 
         // Tri 
         $sort = $params['sort'] ?? null;
@@ -75,6 +75,7 @@ return function($app) {
                 'start_date' => $e->start_date,
                 'end_date' => $e->end_date,
                 'category' => $e->category->name ?? null,
+                'image' => $e->image->name ?? null,
                 'url' => "/api/evenements/{$e->id}"
             ];
         });
@@ -86,7 +87,7 @@ return function($app) {
     $app->get('/api/categories/{id}/evenements', function (Request $request, Response $response, array $args) {
         $events = Events::where('category_id', $args['id'])
             ->where('is_published', true)
-            ->with('category')
+            ->with('category', 'image')
             ->get()
             ->map(function ($e) {
                 return [
@@ -95,6 +96,7 @@ return function($app) {
                     'start_date' => $e->start_date,
                     'end_date' => $e->end_date,
                     'category' => $e->category->name ?? null,
+                    'image' => $e->image->name ?? null,
                     'url' => "/api/evenements/{$e->id}"
                 ];
             });
