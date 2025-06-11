@@ -7,9 +7,9 @@ INSERT INTO categories (name) VALUES
 
 -- Ajout d’utilisateurs
 INSERT INTO users (id, email, password_hash, role) VALUES
-(UUID(), 'alice@lachaudiere.org', '$2a$12$lI9GYCvhBD3p71Kg5Oy2de/IJefwD2fRBehlkzMFE3Kg4AKZSt1pK', 100),
-(UUID(), 'bob@lachaudiere.org', '$2a$12$oCGAqFW57hlGqRgk72JbSei7ycay1wegwQacjK.LmRn1/uHrLxXh.', 50),
-(UUID(), 'carole@lachaudiere.org', '$2a$12$7knS.GNiqLQZhHluhgoyUOnh9lEKyLil5nfSRDVUIwv1uHTdHqUky', 1);
+(UUID(), 'alice@lachaudiere.org', '$2a$12$8t2LCvQwKM6WOn9Z3rxsH.op.wF.BVpgsQ6VVcQx3yc83rr./3iw.', 100),
+(UUID(), 'bob@lachaudiere.org', '$2a$12$jaRb1PEEhGSpCojdUdsSx.PgDMhQaLCL2ZKJhg5tJAT0uSGL3qB9m', 50),
+(UUID(), 'carole@lachaudiere.org', '$2a$12$q8R9yzAVJ6T.s3DwuN6MNe.9kaYfwvgHb6YjjlpIZYB5Q9aMlF9lq', 1);
 
 -- Ajout d’images (avec vrais UUIDs)
 INSERT INTO images (id, name) VALUES

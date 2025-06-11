@@ -8,25 +8,24 @@ import {
 
 document.addEventListener("DOMContentLoaded", async () => {
   await displayCategories(); // fonctionnalité 3
-  await displayCurrentMonthEvents(); // fonctionnalité 1
   await setupCategoryFilter(); // fonctionnalité 2
+  await setupSortOptions();
+  const events = await loadEvents();
+  displayEvents(events);
 });
 
-// Fonctionnalité 1 : événements du mois courant
-async function displayCurrentMonthEvents() {
+function displayEvents(events) {
   const container = document.getElementById("events-list");
-  container.innerHTML = "Chargement...";
-  const events = await loadEvents();
+  container.innerHTML = "";
 
   if (!events.length) {
-    container.textContent = "Aucun événement prévu pour ce mois.";
+    container.textContent = "Aucun événement ne correspond à votre recherche.";
     return;
   }
 
-  container.innerHTML = "";
   events.forEach((event) => {
     const item = document.createElement("li");
-    item.textContent = `${event.title} – ${event.artist} – ${new Date(
+    item.textContent = `${event.title} – ${new Date(
       event.start_date
     ).toLocaleDateString()} – ${event.category}`;
     const btn = document.createElement("button");
@@ -65,23 +64,28 @@ async function setupCategoryFilter() {
       events = await loadEventsByCategory(categoryId);
     }
 
-    if (!events.length) {
-      container.textContent = "Aucun événement pour cette catégorie.";
-      return;
+    displayEvents(events);
+  });
+}
+
+async function setupSortOptions() {
+  const select = document.getElementById("sort-options");
+  if (!select) return;
+
+  select.addEventListener("change", async (e) => {
+    const sort = e.target.value;
+    const categoryId = document.getElementById("category-filter").value;
+    const container = document.getElementById("events-list");
+    container.innerHTML = "Chargement...";
+
+    let events;
+    if (categoryId) {
+      events = await loadEventsByCategory(categoryId, sort);
+    } else {
+      events = await loadEvents({ sort });
     }
 
-    container.innerHTML = "";
-    events.forEach((event) => {
-      const item = document.createElement("li");
-      item.textContent = `${event.title} – ${event.artist} – ${new Date(
-        event.start_date
-      ).toLocaleDateString()} – ${event.category}`;
-      const btn = document.createElement("button");
-      btn.textContent = "Détails";
-      btn.addEventListener("click", () => displayEventDetails(event.id));
-      item.appendChild(btn);
-      container.appendChild(item);
-    });
+    displayEvents(events);
   });
 }
 

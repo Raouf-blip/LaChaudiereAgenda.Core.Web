@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS lachaudiere;
 CREATE DATABASE IF NOT EXISTS lachaudiere;
 USE lachaudiere;
 

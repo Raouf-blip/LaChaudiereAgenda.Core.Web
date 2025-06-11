@@ -1,8 +1,8 @@
-const URL = "http://localhost:10000/api";
+const BASE_URL = "http://localhost:10000/api";
 
 export async function loadCategories() {
   try {
-    const response = await fetch(`${URL}/categories`);
+    const response = await fetch(`${BASE_URL}/categories`);
     if (!response.ok) throw new Error("Erreur HTTP " + response.status);
     return await response.json();
   } catch (error) {
@@ -11,9 +11,13 @@ export async function loadCategories() {
   }
 }
 
-export async function loadEvents() {
+export async function loadEvents(params = {}) {
   try {
-    const response = await fetch(`${URL}/evenements`);
+    const url = new URL(`${BASE_URL}/evenements`);
+    if (params.sort) {
+      url.searchParams.append("sort", params.sort);
+    }
+    const response = await fetch(url);
     if (!response.ok) throw new Error("Erreur HTTP " + response.status);
     return await response.json();
   } catch (error) {
@@ -22,9 +26,13 @@ export async function loadEvents() {
   }
 }
 
-export async function loadEventsByCategory(id) {
+export async function loadEventsByCategory(id, sort = null) {
   try {
-    const response = await fetch(`${URL}/categories/${id}/evenements`);
+    const url = new URL(`${BASE_URL}/categories/${id}/evenements`);
+    if (sort) {
+      url.searchParams.append("sort", sort);
+    }
+    const response = await fetch(url);
     if (!response.ok) throw new Error("Erreur HTTP " + response.status);
     return await response.json();
   } catch (error) {
@@ -38,7 +46,7 @@ export async function loadEventsByCategory(id) {
 
 export async function loadEventDetails(id) {
   try {
-    const response = await fetch(`${URL}/evenements/${id}`);
+    const response = await fetch(`${BASE_URL}/evenements/${id}`);
     if (!response.ok) throw new Error("Erreur HTTP " + response.status);
     return await response.json();
   } catch (error) {
@@ -52,7 +60,7 @@ export async function loadEventDetails(id) {
 
 export async function loadCurrentEvents() {
   try {
-    const response = await fetch(`${URL}/evenements/mois`);
+    const response = await fetch(`${BASE_URL}/evenements/mois`);
     if (!response.ok) throw new Error("Erreur HTTP " + response.status);
     return await response.json();
   } catch (error) {
