@@ -28,7 +28,7 @@ INSERT INTO events (
  'Quintette Jazz de la Chaudière',
  'Un concert unique mêlant improvisation et standards du jazz contemporain.',
  '2025-06-20', '2025-06-20', '20:30:00', '23:00:00', 12.00,
- '00000000-0000-0000-0000-000000001001',
+ (SELECT id FROM images WHERE name = 'concert-jazz.jpg'),
  (SELECT id FROM categories WHERE name = 'concert'),
  NULL),
 
@@ -38,7 +38,7 @@ INSERT INTO events (
  'Ionesco',
  'Une pièce originale inspirée de Ionesco, jouée par la troupe locale.',
  '2025-07-05', '2025-07-05', '19:00:00', '21:00:00', 8.00,
- '00000000-0000-0000-0000-000000001002',
+ (SELECT id FROM images WHERE name = 'theatre-absurde.jpg'),
  (SELECT id FROM categories WHERE name = 'spectacle'),
  NULL),
 
@@ -48,7 +48,7 @@ INSERT INTO events (
 'Collectif d’artistes locaux',
  'Exposition de jeunes artistes de la région sur le thème du corps et de l’espace.',
  '2025-06-01', '2025-06-30', NULL, NULL, 0.00,
- '00000000-0000-0000-0000-000000001003',
+ (SELECT id FROM images WHERE name = 'expo-peinture.jpg'),
  (SELECT id FROM categories WHERE name = 'exposition'),
  NULL),
 
@@ -58,6 +58,6 @@ INSERT INTO events (
  'Marc Lemoine',
  'Intervention du chercheur Marc Lemoine sur l’adaptation climatique des territoires.',
  '2025-06-18', '2025-06-18', '18:00:00', '20:00:00', 5.00,
- '00000000-0000-0000-0000-000000001004',
+ (SELECT id FROM images WHERE name = 'conference-climat.jpg'),
  (SELECT id FROM categories WHERE name = 'conférence'),
  NULL);

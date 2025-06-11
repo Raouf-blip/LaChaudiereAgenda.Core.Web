@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Chaudière Agenda</title>
+    <link rel="stylesheet" href="/web/css/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>La Chaudière Agenda</h1>
+    </header>
+
+    <main>
+      <!-- Liste des catégories (clic) -->
+      <section id="categories">
+        <h2>Catégories</h2>
+        <div id="categorie-list">Chargement...</div>
+      </section>
+
+      <!-- Filtrage par catégorie -->
+      <section id="filtrage">
+        <h2>Filtrer les événements</h2>
+        <label for="category-filter">Choisir une catégorie :</label>
+        <select id="category-filter">
+          <option value="">Toutes les catégories</option>
+        </select>
+      </section>
+
+      <!-- Événements affichés (mois courant ou filtré ou par clic) -->
+      <section id="evenements">
+        <h2>Événements</h2>
+        <ul id="events-list"></ul>
+      </section>
+
+      <!-- Détails (prévu pour plus tard) -->
+      <section id="details" style="display: none">
+        <h2>Détails</h2>
+        <div id="evenement-details"></div>
+      </section>
+    </main>
+
+    <script type="module" src="/web/js/app.js"></script>
+  </body>
+</html>
