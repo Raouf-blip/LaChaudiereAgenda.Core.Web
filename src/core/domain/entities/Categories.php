@@ -11,6 +11,7 @@ class Categories extends Model {
     public $timestamps = false;
 
     protected $keyType = 'int';
+    // protected $fillable = ['name'];
 
     public function events() {
         return $this->hasMany(Events::class, 'category_id', 'id');
