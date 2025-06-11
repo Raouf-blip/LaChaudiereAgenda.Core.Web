@@ -17,7 +17,7 @@ $app = AppFactory::create();
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, true, true);
 
-$twig = Twig::create(__DIR__ . '/../src/web/templates', ['cache' => false]);
+$twig = Twig::create(__DIR__ . '/../src/templates', ['cache' => false]);
 $app->add(TwigMiddleware::create($app, $twig));
 
 require __DIR__ . '/../src/config/routes/api.php';
