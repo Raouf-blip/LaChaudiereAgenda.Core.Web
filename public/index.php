@@ -22,7 +22,7 @@ $app = AppFactory::create();
 $app->add(CorsMiddleware::class);
 
 // Configuration de Twig
-$twig = Twig::create(__DIR__ . '/../src/web', ['cache' => false]);
+$twig = Twig::create(__DIR__ . '/../src/web/templates', ['cache' => false]);
 $app->add(TwigMiddleware::create($app, $twig));
 
 $app->add(function ($request, $handler) {

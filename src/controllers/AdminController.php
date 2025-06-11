@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Chaudiere\core\domain\entities\Events;
 use Chaudiere\core\domain\entities\Categories;
 use Chaudiere\core\domain\entities\Images;
+use Slim\Psr7\UploadedFile;
 
 class AdminController
 {
@@ -19,13 +20,23 @@ class AdminController
         if ($request->getMethod() === 'POST') {
             $data = $request->getParsedBody();
 
-            // Créer l'image si fournie
             $imageId = null;
-            if (!empty($data['image_url'])) {
-                $image = Images::create([
-                    'id' => uniqid(),
-                    'name' => $data['image_url']
-                ]);
+            $uploadedFiles = $request->getUploadedFiles();
+            $uploadedFile = $uploadedFiles['image_file'] ?? null;
+
+            if ($uploadedFile instanceof UploadedFile && $uploadedFile->getError() === UPLOAD_ERR_OK) {
+                $uploadDirectory = __DIR__ . '../../public/img';
+                if (!is_dir($uploadDirectory)) {
+                    mkdir($uploadDirectory, 0777, true);
+                }
+
+                $filename = moveUploadedFile($uploadDirectory, $uploadedFile);
+
+                $image = new Images();
+                $image->id = uniqid();
+                $image->name = $filename;
+                $image->save();
+
                 $imageId = $image->id;
             }
 
@@ -48,7 +59,18 @@ class AdminController
         }
 
         $params['categories'] = $categories;
-        return $twig->render($response, 'admin/create_event.twig', $params);
+        return $twig->render($response, 'create_event.twig', $params);
+    }
+
+    private function moveUploadedFile(string $directory, UploadedFile $uploadedFile): string
+    {
+        $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
+        $basename = bin2hex(random_bytes(8));
+        $filename = sprintf('%s.%s', $basename, $extension);
+
+        $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
+
+        return $filename;
     }
 
 }
