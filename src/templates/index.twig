@@ -12,51 +12,50 @@
 </header>
 
 <main>
-    <!-- Liste des catégories (clic) -->
-    <section id="categories">
-        <h2>Catégories</h2>
-        <div id="categorie-list">Chargement...</div>
-    </section>
+    <aside>
+        <!-- Filtrage par catégorie -->
+        <section id="filtrage">
+            <h2>Filtres</h2>
+            <label for="category-filter">Filtrer par catégorie :</label>
+            <div id="categorie-list">Chargement...</div>
+            <select id="category-filter">
+                <option value="">Toutes les catégories</option>
+            </select>
+        </section>
 
-    <!-- Filtrage par catégorie -->
-    <section id="filtrage">
-        <h2>Filtrer les événements</h2>
-        <label for="category-filter">Choisir une catégorie :</label>
-        <select id="category-filter">
-            <option value="">Toutes les catégories</option>
-        </select>
-    </section>
+        <!-- Tri des événements -->
+        <section id="tri">
+            <h2>Trier les événements</h2>
+            <label for="sort-options">Trier par :</label>
+            <select id="sort-options">
+                <option value="date-asc">Date (croissant)</option>
+                <option value="date-desc">Date (décroissant)</option>
+                <option value="titre">Titre</option>
+            </select>
+        </section>
+    </aside>
 
-    <!-- Tri des événements -->
-    <section id="tri">
-        <h2>Trier les événements</h2>
-        <label for="sort-options">Trier par :</label>
-        <select id="sort-options">
-            <option value="date-asc">Date (croissant)</option>
-            <option value="date-desc">Date (décroissant)</option>
-            <option value="titre">Titre</option>
-        </select>
-    </section>
+    <div class="content">
+        <!-- Événements affichés (mois courant ou filtré ou par clic) -->
+        <section id="evenements">
+            <h2>Événements</h2>
+            <button id="show-favorites">Voir mes favoris</button>
+            <ul id="events-list"></ul>
+        </section>
 
-    <!-- Événements affichés (mois courant ou filtré ou par clic) -->
-    <section id="evenements">
-        <h2>Événements</h2>
-        <button id="show-favorites">Voir mes favoris</button>
-        <ul id="events-list"></ul>
-    </section>
+        <!-- Favoris -->
+        <section id="favoris" style="display:none;">
+            <h2>Mes favoris</h2>
+            <button id="hide-favorites">Retour aux événements</button>
+            <ul id="favorites-list"></ul>
+        </section>
 
-    <!-- Favoris -->
-    <section id="favoris" style="display:none;">
-        <h2>Mes favoris</h2>
-        <button id="hide-favorites">Retour aux événements</button>
-        <ul id="favorites-list"></ul>
-    </section>
-
-    <!-- Détails (prévu pour plus tard) -->
-    <section id="details" style="display:none;">
-        <h2>Détails</h2>
-        <div id="evenement-details"></div>
-    </section>
+        <!-- Détails (prévu pour plus tard) -->
+        <section id="details" style="display:none;">
+            <h2>Détails</h2>
+            <div id="evenement-details"></div>
+        </section>
+    </div>
 </main>
 
 <script type="module" src="/js/app.js"></script>

@@ -38,7 +38,7 @@ return function($app) {
 
     // détails d'un event
     $app->get('/api/evenements/{id}', function (Request $request, Response $response, array $args) {
-        $event = Events::with('category')->find($args['id']);
+        $event = Events::with('category', 'image')->find($args['id']);
         if (!$event || !$event->is_published) {
             return jsonResponse($response, ['error' => 'Événement introuvable ou non publié'], 404);
         }
@@ -51,8 +51,15 @@ return function($app) {
 
         $query = Events::where('is_published', true)->with('category', 'image');
 
-        // Tri 
         $sort = $params['sort'] ?? null;
+
+        // If no sort parameter is present, filter for the current month.
+        if (!$sort) {
+            $query->whereMonth('start_date', date('m'))
+                  ->whereYear('start_date', date('Y'));
+        }
+
+        // Tri
         switch ($sort) {
             case 'date-asc':
                 $query->orderBy('start_date', 'asc');
@@ -72,6 +79,7 @@ return function($app) {
             return [
                 'id' => $e->id,
                 'title' => $e->title,
+                'artist' => $e->artist,
                 'start_date' => $e->start_date,
                 'end_date' => $e->end_date,
                 'category' => $e->category->name ?? null,
@@ -93,6 +101,7 @@ return function($app) {
                 return [
                     'id' => $e->id,
                     'title' => $e->title,
+                    'artist' => $e->artist,
                     'start_date' => $e->start_date,
                     'end_date' => $e->end_date,
                     'category' => $e->category->name ?? null,

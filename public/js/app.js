@@ -1,10 +1,14 @@
-import { loadCategories, loadEventsByCategory, loadEvents } from "./api.js";
+import {
+  loadCategories,
+  loadEventsByCategory,
+  loadEvents,
+  loadCurrentEvents,
+} from "./api.js";
 import { displayEvents, displayFavorites, displayEventDetails } from "./ui.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   await setupEventListeners();
-  await displayCategories();
-  await setupCategoryFilter();
+  await setupFilters();
   await setupSortOptions();
   const events = await loadEvents();
   displayEvents(events);
@@ -28,11 +32,14 @@ async function setupEventListeners() {
   });
 }
 
-async function setupCategoryFilter() {
+async function setupFilters() {
   const select = document.getElementById("category-filter");
-  if (!select) return;
+  const categoryListContainer = document.getElementById("categorie-list");
+  if (!select || !categoryListContainer) return;
 
   const categories = await loadCategories();
+
+  select.innerHTML = '<option value="">Toutes les catégories</option>';
   categories.forEach((cat) => {
     const option = document.createElement("option");
     option.value = cat.id;
@@ -40,7 +47,32 @@ async function setupCategoryFilter() {
     select.appendChild(option);
   });
 
+  categoryListContainer.innerHTML = "";
+  const allCategoriesDiv = document.createElement("div");
+  allCategoriesDiv.textContent = "Toutes";
+  allCategoriesDiv.classList.add("category-item");
+  allCategoriesDiv.addEventListener("click", () => {
+    select.value = "";
+    select.dispatchEvent(new Event("change"));
+  });
+  categoryListContainer.appendChild(allCategoriesDiv);
+
+  categories.forEach((cat) => {
+    const div = document.createElement("div");
+    div.textContent = cat.name;
+    div.classList.add("category-item");
+    div.addEventListener("click", () => {
+      select.value = cat.id;
+      select.dispatchEvent(new Event("change"));
+    });
+    categoryListContainer.appendChild(div);
+  });
+
   select.addEventListener("change", async (e) => {
+    document.getElementById("evenements").style.display = "block";
+    document.getElementById("favoris").style.display = "none";
+    document.getElementById("details").style.display = "none";
+
     const categoryId = e.target.value;
     const sort = document.getElementById("sort-options").value;
     const container = document.getElementById("events-list");
@@ -75,33 +107,5 @@ async function setupSortOptions() {
     }
 
     displayEvents(events);
-  });
-}
-
-async function displayCategories() {
-  const container = document.getElementById("categorie-list");
-  const categories = await loadCategories();
-
-  if (!categories.length) {
-    container.textContent = "Aucune catégorie trouvée.";
-    return;
-  }
-
-  container.innerHTML = "";
-  categories.forEach((cat) => {
-    const div = document.createElement("div");
-    div.textContent = cat.name;
-    div.classList.add("category-item");
-    container.appendChild(div);
-
-    div.addEventListener("click", async () => {
-      const eventsContainer = document.getElementById("events-list");
-      document.getElementById("evenements").style.display = "block";
-      document.getElementById("details").style.display = "none";
-      document.getElementById("favoris").style.display = "none";
-      eventsContainer.innerHTML = "Chargement...";
-      const events = await loadEventsByCategory(cat.id);
-      displayEvents(events);
-    });
   });
 }
