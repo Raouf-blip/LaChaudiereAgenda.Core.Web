@@ -7,23 +7,23 @@ INSERT INTO categories (name) VALUES
 
 -- Ajout d’utilisateurs
 INSERT INTO users (id, email, password_hash, role) VALUES
-(UUID(), 'alice@lachaudiere.org', 'hashed_password_1', 100),
-(UUID(), 'bob@lachaudiere.org', 'hashed_password_2', 50),
-(UUID(), 'carole@lachaudiere.org', 'hashed_password_3', 1);
+(UUID(), 'alice@lachaudiere.org', '$2a$12$lI9GYCvhBD3p71Kg5Oy2de/IJefwD2fRBehlkzMFE3Kg4AKZSt1pK', 100),
+(UUID(), 'bob@lachaudiere.org', '$2a$12$oCGAqFW57hlGqRgk72JbSei7ycay1wegwQacjK.LmRn1/uHrLxXh.', 50),
+(UUID(), 'carole@lachaudiere.org', '$2a$12$7knS.GNiqLQZhHluhgoyUOnh9lEKyLil5nfSRDVUIwv1uHTdHqUky', 1);
 
 -- Ajout d’images (avec vrais UUIDs)
 INSERT INTO images (id, name) VALUES
-('00000000-0000-0000-0000-000000001001', 'concert-jazz.jpg'),
-('00000000-0000-0000-0000-000000001002', 'theatre-absurde.jpg'),
-('00000000-0000-0000-0000-000000001003', 'expo-peinture.jpg'),
-('00000000-0000-0000-0000-000000001004', 'conference-climat.jpg');
+(UUID(), 'concert-jazz.jpg'),
+(UUID(), 'theatre-absurde.jpg'),
+(UUID(), 'expo-peinture.jpg'),
+(UUID(), 'conference-climat.jpg');
 
 -- Ajout d’événements
 INSERT INTO events (
     id, title, artist, description, start_date, end_date, start_time, end_time, price, image_id, category_id, created_by
 ) VALUES
 -- Concert
-('00000000-0000-0000-0000-000000000001',
+(UUID(),
  'Soirée Jazz Impro',
  'Quintette Jazz de la Chaudière',
  'Un concert unique mêlant improvisation et standards du jazz contemporain.',
@@ -33,7 +33,7 @@ INSERT INTO events (
  NULL),
 
 -- Spectacle
-('00000000-0000-0000-0000-000000000002',
+(UUID(),
  'Théâtre de l’Absurde',
  'Ionesco',
  'Une pièce originale inspirée de Ionesco, jouée par la troupe locale.',
@@ -43,7 +43,7 @@ INSERT INTO events (
  NULL),
 
 -- Exposition
-('00000000-0000-0000-0000-000000000003',
+(UUID(),
  'Regards croisés - Peintures',
 'Collectif d’artistes locaux',
  'Exposition de jeunes artistes de la région sur le thème du corps et de l’espace.',
@@ -53,7 +53,7 @@ INSERT INTO events (
  NULL),
 
 -- Conférence
-('00000000-0000-0000-0000-000000000004',
+(UUID(),
  'Conférence : Climat et Résilience',
  'Marc Lemoine',
  'Intervention du chercheur Marc Lemoine sur l’adaptation climatique des territoires.',
