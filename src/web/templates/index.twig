@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Chaudière Agenda</title>
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<header>
+    <h1>La Chaudière Agenda</h1>
+</header>
+
+<main>
+    <aside>
+        <!-- Filtrage par catégorie -->
+        <section id="filtrage">
+            <h2>Filtres</h2>
+            <label for="category-filter">Filtrer par catégorie :</label>
+            <div id="categorie-list">Chargement...</div>
+            <select id="category-filter">
+                <option value="">Toutes les catégories</option>
+            </select>
+        </section>
+
+        <!-- Tri des événements -->
+        <section id="tri">
+            <h2>Trier les événements</h2>
+            <label for="sort-options">Trier par :</label>
+            <select id="sort-options">
+                <option value="date-asc">Date (croissant)</option>
+                <option value="date-desc">Date (décroissant)</option>
+                <option value="titre">Titre</option>
+            </select>
+        </section>
+    </aside>
+
+    <div class="content">
+        <!-- Événements affichés (mois courant ou filtré ou par clic) -->
+        <section id="evenements">
+            <h2>Événements</h2>
+            <button id="show-favorites">Voir mes favoris</button>
+            <ul id="events-list"></ul>
+        </section>
+
+        <!-- Favoris -->
+        <section id="favoris" style="display:none;">
+            <h2>Mes favoris</h2>
+            <button id="hide-favorites">Retour aux événements</button>
+            <ul id="favorites-list"></ul>
+        </section>
+
+        <!-- Détails (prévu pour plus tard) -->
+        <section id="details" style="display:none;">
+            <h2>Détails</h2>
+            <div id="evenement-details"></div>
+        </section>
+    </div>
+</main>
+
+<script type="module" src="/js/app.js"></script>
+</body>
+</html>
