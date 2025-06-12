@@ -1,3 +1,6 @@
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
+
 -- Ajout de catégories
 INSERT INTO categories (name) VALUES
 ('concert'),
