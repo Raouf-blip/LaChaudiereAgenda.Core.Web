@@ -7,6 +7,8 @@ RUN apt-get update && apt-get install -y \
 
 # Installer Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Update Composer
+RUN composer self-update --2
 
 # Préparation du dossier de travail
 WORKDIR /var/www
