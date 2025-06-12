@@ -71,6 +71,8 @@ services:
     working_dir: /var/www
     expose:
       - 9000
+    command: >
+      sh -c "composer update"
     depends_on:
       - mysql-db
     networks:
