@@ -1,0 +1,67 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<h2>Créer un événement</h2>
+
+{% if success %}
+<p style="color: green;">✅ Événement ajouté avec succès !</p>
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data"> {# ⚠️ Ajouté ici #}
+    <label>
+        Titre :
+        <input type="text" name="title" required>
+    </label><br>
+
+    <label>
+        Description :<br>
+        <textarea name="description" rows="4" cols="50" required></textarea>
+    </label><br>
+
+    <label>
+        Date de début :
+        <input type="date" name="start_date" required>
+    </label><br>
+
+    <label>
+        Date de fin :
+        <input type="date" name="end_date" required>
+    </label><br>
+
+    <label>
+        Heure de début :
+        <input type="time" name="start_time">
+    </label><br>
+
+    <label>
+        Heure de fin :
+        <input type="time" name="end_time">
+    </label><br>
+
+    <label>
+        Tarif (€) :
+        <input type="number" step="0.01" name="price">
+    </label><br>
+
+    <label>
+        Image :
+        <input type="file" name="image_file">
+    </label><br>
+
+    <label>
+        Catégorie :
+        <select name="category_id" required>
+            {% for cat in categories %}
+                <option value="{{ cat.id }}">{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+    </label><br>
+
+    <label>
+        <input type="checkbox" name="is_published" checked> Publié
+    </label><br><br>
+
+    <button type="submit">Créer l’événement</button>
+</form>
+
+{% endblock %}
