@@ -1,15 +1,17 @@
+/* --- Variables CSS --- */
 :root {
-  --primary-color: #6366f1;
-  --secondary-color: #8b5cf6;
-  --background-color: #0f0f23;
-  --surface-color: #1a1a2e;
-  --surface-hover: #16213e;
-  --text-primary: #ffffff;
-  --text-secondary: #a5b4fc;
-  --text-muted: #6b7280;
-  --border-color: #374151;
-  --accent-color: #10b981;
-  --warning-color: #f59e0b;
+  --primary-color: #6366f1; /* Bleu-violet principal */
+  --secondary-color: #8b5cf6; /* Violet secondaire */
+  --background-color: #0f0f23; /* Couleur de fond très sombre */
+  --surface-color: #1a1a2e; /* Couleur des surfaces des composants */
+  --surface-hover: #16213e; /* Couleur de survol pour les surfaces */
+  --text-primary: #ffffff; /* Texte principal clair */
+  --text-secondary: #a5b4fc; /* Texte secondaire légèrement plus clair que le muted */
+  --text-muted: #6b7280; /* Texte discret / gris */
+  --border-color: #374151; /* Couleur des bordures */
+  --accent-color: #10b981; /* Couleur d'accentuation (vert) */
+  --warning-color: #f59e0b; /* Couleur d'avertissement (orange) */
+  --danger-color: #ef4444; /* Couleur de danger (rouge) */
   --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   --gradient-accent: linear-gradient(135deg, #10b981 0%, #059669 100%);
   --font-family: "Inter", "Segoe UI", system-ui, sans-serif;
@@ -17,21 +19,33 @@
   --border-radius-small: 8px;
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --glow: 0 0 20px rgba(99, 102, 241, 0.3);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5); /* Ombre plus prononcée */
+
+  /* Variables pour la hauteur du header et du footer, si tu les définis de manière fixe */
+  /* Elles sont désormais dynamiques via les hauteurs de contenu si tu utilises flex:1 sur main */
+  /* Par exemple, si tu as des hauteurs minimales pour header/footer pour calc() */
+  --header-height: 4.5rem; /* La hauteur minimale de ton .main-header */
+  --footer-height: 1rem; /* Une estimation de la hauteur de ton .main-footer */
 }
 
+/* --- Reset et Base --- */
 * {
   box-sizing: border-box;
 }
 
 body {
   font-family: var(--font-family);
-  background-color: var(--background-color);
+  background: linear-gradient(135deg, var(--background-color) 0%, #1a1a2e 50%, #16213e 100%);
   color: var(--text-primary);
-  line-height: 1.4;
+  line-height: 1.6;
   margin: 0;
   padding: 0;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh; /* Essentiel : Le body doit prendre au moins 100% de la hauteur de la vue */
+  display: flex; /* Essentiel : Active Flexbox sur le body */
+  flex-direction: column; /* Essentiel : Empile les enfants (header, main, footer) verticalement */
+  position: relative;
 }
 
 h1,
@@ -52,83 +66,367 @@ h2 {
   font-weight: 600;
 }
 
-header {
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-  padding: 40px 0;
-  text-align: center;
-  border-bottom: 1px solid var(--border-color);
-  position: relative;
-  overflow: hidden;
-}
-
-header::before {
+/* --- Effet de fond lumineux sur le body (global) --- */
+body::before {
   content: "";
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(99, 102, 241, 0.1) 0%,
-    transparent 70%
-  );
+  width: 100%;
+  height: 100%;
+  background:
+          radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+          radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
   pointer-events: none;
+  z-index: -1;
 }
 
-header h1 {
-  color: var(--text-primary);
-  margin: 0;
-  font-size: 4rem;
-  font-weight: 800;
-  letter-spacing: -3px;
+/* --- Header principal --- */
+.main-header {
+  background: linear-gradient(135deg, var(--surface-color) 0%, var(--surface-hover) 100%);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10000;
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-lg);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: var(--header-height); /* Utilise la variable de hauteur */
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-icon {
+  font-size: 2.5rem;
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5)); }
+  to { filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.8)); }
+}
+
+.brand-title {
+  font-size: 2rem;
+  font-weight: 800;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+/* Navigation principale */
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.25rem;
+  text-decoration: none;
+  color: var(--text-secondary);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
   position: relative;
-  z-index: 1;
+  font-weight: 500;
+  border: 2px solid transparent;
 }
 
-header h1::before {
-  content: "🚀 ";
-  font-size: 3rem;
-  margin-right: 16px;
+.nav-item i {
+  font-size: 1.1rem;
+  transition: var(--transition);
 }
 
+.nav-item:hover {
+  color: var(--text-primary);
+  background: linear-gradient(135deg, var(--surface-hover) 0%, rgba(99, 102, 241, 0.2) 100%);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: var(--glow);
+}
+
+.nav-item:hover i {
+  transform: scale(1.1);
+  color: var(--primary-color);
+}
+
+/* Boutons d'authentification */
+.auth-btn {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.875rem;
+}
+
+.signin-btn {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.signin-btn:hover {
+  background: var(--gradient-primary);
+  color: var(--text-primary);
+}
+
+.signup-btn {
+  background: var(--gradient-primary);
+  color: var(--text-primary);
+  box-shadow: var(--glow);
+}
+
+.signup-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.5), var(--shadow-lg);
+}
+
+/* Menu déroulant */
+.nav-dropdown {
+  position: relative;
+}
+
+.dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dropdown-arrow {
+  font-size: 0.75rem;
+  transition: var(--transition);
+  color: var(--text-muted);
+}
+
+.nav-dropdown.active .dropdown-arrow {
+  transform: rotate(180deg);
+  color: var(--primary-color);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--surface-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-color);
+  min-width: 220px;
+  opacity: 0;
+  visibility: hidden; /* Cacher par défaut */
+  transform: translateY(-10px);
+  transition: var(--transition);
+  z-index: 9999; /* Valeur très élevée pour être au-dessus */
+  backdrop-filter: blur(20px);
+  padding: 0.5rem 0; /* Ajouté pour l'espacement interne */
+}
+
+.nav-dropdown.active .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: var(--transition);
+  border-radius: var(--border-radius-small);
+  margin: 0.25rem;
+}
+
+.dropdown-item:hover {
+  background: linear-gradient(135deg, var(--surface-hover) 0%, rgba(99, 102, 241, 0.1) 100%);
+  color: var(--text-primary);
+  transform: translateX(4px);
+  border-left: 3px solid var(--primary-color);
+}
+
+.dropdown-item i {
+  color: var(--primary-color);
+  width: 1.2rem;
+}
+
+/* Menu utilisateur (s'il y en avait un séparé, sinon c'est le dropdown) */
+/* Les styles .user-menu ne sont plus nécessaires s'ils sont intégrés au dropdown */
+/* Si tu as un .user-menu qui n'est pas un dropdown, ses styles devraient être spécifiques */
+/*
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    padding: 0.75rem 1.25rem;
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--glow);
+}
+*/
+
+.user-avatar {
+  width: 2.75rem;
+  height: 2.75rem;
+  background: var(--gradient-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.user-email {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.user-role {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.logout-btn {
+  color: var(--danger-color);
+  /* padding, border, etc. sont déjà dans .dropdown-item ou .nav-item */
+  text-decoration: none;
+  border: 1px solid transparent;
+  /* Ajuste si tu veux une apparence spécifique pour le bouton de déconnexion */
+}
+
+
+/* --- Contenu principal (<main>) --- */
 main {
+  flex: 1;
+  background: rgba(15, 15, 35, 0.8);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden; /* Important pour les bords arrondis et tout débordement interne */
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+
   display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 0;
-  max-width: 1400px;
-  margin: 0 auto;
-  min-height: calc(100vh - 200px);
+  grid-template-columns: 280px 1fr; /* 280px pour l'aside, 1fr pour le contenu restant */
+  gap: 0; /* Pas d'espace entre l'aside et le content */
+  padding: 0; /* Retire le padding directement sur le main. Il sera géré par ses enfants. */
+  min-height: calc(100vh - var(--header-height) - var(--footer-height) - 4rem);
 }
 
+/* --- Aside (barre latérale de filtres/tri) --- */
 aside {
   background: linear-gradient(135deg, var(--surface-color) 0%, #1e1e3f 100%);
-  padding: 32px 24px;
+  padding: 32px 24px; /* Garde le padding INTERNE à l'aside pour son contenu */
   border-right: 1px solid var(--border-color);
   position: sticky;
   top: 0;
-  height: fit-content;
+  height: 100%; /* S'assure qu'il prend toute la hauteur disponible dans la grille */
   backdrop-filter: blur(20px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  grid-column: 1 / 2;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) var(--surface-hover);
 }
 
+aside::-webkit-scrollbar {
+  width: 8px;
+}
+
+aside::-webkit-scrollbar-track {
+  background: var(--surface-hover);
+  border-radius: 10px;
+}
+
+aside::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 10px;
+  border: 2px solid var(--surface-hover);
+}
+
+/* --- Conteneur des sections de contenu principal (.content) --- */
+.content {
+  grid-column: 2 / 3; /* Positions content in the second grid column */
+  background-color: var(--background-color);
+  padding: 32px; /* **Add this:** Internal padding for the content's sections */
+  overflow-y: auto; /* Enables scrolling if content overflows */
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) var(--surface-hover);
+}
+
+
+.content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: var(--surface-hover);
+  border-radius: 10px;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 10px;
+  border: 2px solid var(--surface-hover);
+}
+
+/* --- Sections spécifiques à l'intérieur de .content --- */
 section {
-  background-color: transparent;
-  padding: 32px;
+  background-color: transparent; /* Les sections elles-mêmes n'ont pas de fond, héritent de .content */
+  /* padding: 32px; */ /* Déjà appliqué au .content parent si tu veux un padding uniforme */
+  margin-bottom: 32px; /* Espacement entre les sections */
+}
+section:last-child {
   margin-bottom: 0;
 }
 
+/* Les styles suivants s'appliquent à l'affichage des sections elles-mêmes */
 #evenements,
 #favoris,
 #details {
-  grid-column: 2 / 3;
-  background-color: var(--background-color);
+  /* Le background-color peut être ici si tu veux une couleur de fond différente pour chaque section */
+  /* Sinon, supprime-le pour qu'elles héritent du .content parent */
+  /* background-color: var(--background-color); */
 }
 
+
+/* --- Listes d'événements/favoris --- */
 ul {
   list-style: none;
   padding: 0;
@@ -154,11 +452,11 @@ ul {
 #events-list li:hover,
 #favorites-list li:hover {
   background: linear-gradient(
-    135deg,
-    var(--surface-hover) 0%,
-    rgba(99, 102, 241, 0.1) 100%
+          135deg,
+          var(--surface-hover) 0%,
+          rgba(99, 102, 241, 0.1) 100%
   );
-  margin: 0 -16px;
+  margin: 0 -16px; /* Pour un effet de "débordement" lors du survol */
   padding: 16px;
   border-radius: var(--border-radius);
   transform: scale(1.02);
@@ -247,12 +545,12 @@ ul {
 
 .favorite-button.is-favorite {
   background: rgba(239, 68, 68, 0.1);
-  border-color: #ef4444;
-  color: #ef4444;
+  border-color: var(--danger-color);
+  color: var(--danger-color);
 }
 
 .favorite-button.is-favorite .heart {
-  color: #ef4444;
+  color: var(--danger-color);
 }
 
 .favorite-button:hover {
@@ -275,6 +573,7 @@ ul {
   color: #f87171;
 }
 
+/* --- Boutons généraux --- */
 button {
   background: var(--gradient-primary);
   color: var(--text-primary);
@@ -293,12 +592,6 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-}
-
-button::before {
-  content: "⚡";
-  margin-right: 8px;
-  font-size: 1.1em;
 }
 
 button:hover {
@@ -343,9 +636,11 @@ button.secondary:hover {
 #show-favorites:hover,
 #hide-favorites:hover {
   box-shadow: 0 0 20px rgba(16, 185, 129, 0.5),
-    0 8px 25px rgba(16, 185, 129, 0.3);
+  0 8px 25px rgba(16, 185, 129, 0.3);
 }
 
+/* Ceci est une règle très spécifique et moins réutilisable.
+   Il est souvent préférable d'ajouter une classe pour ce type de bouton. */
 button[textContent="Retirer des favoris"] {
   background: linear-gradient(135deg, var(--warning-color) 0%, #dc2626 100%);
   padding: 10px 20px;
@@ -357,11 +652,12 @@ button[textContent="Retirer des favoris"]::before {
   content: "🗑️";
 }
 
+/* --- Selects (filtres/tri) --- */
 select {
   background: linear-gradient(
-    135deg,
-    var(--surface-color) 0%,
-    var(--surface-hover) 100%
+          135deg,
+          var(--surface-color) 0%,
+          var(--surface-hover) 100%
   );
   color: var(--text-primary);
   border: 2px solid var(--border-color);
@@ -384,18 +680,14 @@ select:focus {
 }
 
 #categorie-list {
-  display: flex;
+  display: grid;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 16px;
 }
 
 .category-item {
-  background: linear-gradient(
-    135deg,
-    var(--surface-color) 0%,
-    var(--surface-hover) 100%
-  );
+  background: var(--surface-hover);
   color: var(--text-secondary);
   padding: 10px 18px;
   border-radius: 25px;
@@ -429,8 +721,9 @@ select:focus {
   box-shadow: var(--glow);
 }
 
+/* --- Détails d'événement --- */
 #details {
-  padding: 48px 32px;
+  padding: 48px 32px; /* Garde le padding pour les détails */
 }
 
 .event-detail-content {
@@ -501,14 +794,14 @@ select:focus {
 }
 
 .back-button {
-  margin-top: 0; /* Adjusted since it's in a flex container now */
+  margin-top: 0;
 }
 
 .event-detail-actions {
   display: flex;
   gap: 16px;
   margin-top: 32px;
-  justify-content: flex-start; /* Align to the start */
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -519,15 +812,6 @@ select:focus {
   color: var(--text-primary);
   position: relative;
   padding-left: 24px;
-}
-
-.section-title::before {
-  content: "✨";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.5rem;
 }
 
 .section-title::after {
@@ -541,7 +825,81 @@ select:focus {
   border-radius: 2px;
 }
 
-/* Scrollbar futuriste */
+/* --- Footer --- */
+.main-footer {
+  background: var(--surface-color);
+  color: var(--text-primary);
+  padding: 2rem 0;
+  border-top: 1px solid var(--border-color);
+  backdrop-filter: blur(20px);
+  animation: fadeInUp 1s ease-out 0.4s both;
+  max-height: var(--footer-height); /* Utilise la variable de hauteur */
+  display: flex; /* Active flexbox pour aligner le contenu */
+  align-items: center; /* Centre verticalement */
+}
+
+.footer-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%; /* Permet au contenu de s'étirer */
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Permet le retour à la ligne sur les petits écrans */
+  gap: 1rem; /* Espacement entre les éléments du footer */
+  margin-bottom: 0.5rem; /* Espacement entre le contenu et le copyright */
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.footer-brand i {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  animation: glow 2s ease-in-out infinite alternate; /* Réutilise l'animation glow */
+}
+
+.footer-user-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.status-indicator {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  animation: statusPulse 2s infinite;
+  box-shadow: 0 0 10px currentColor;
+}
+
+.status-indicator.connected {
+  background: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.status-indicator.disconnected {
+  background: var(--warning-color);
+  color: var(--warning-color);
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+/* --- Scrollbar futuriste --- */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -554,81 +912,241 @@ select:focus {
 ::-webkit-scrollbar-thumb {
   background: var(--gradient-primary);
   border-radius: 4px;
-  box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
-}
-
-::-webkit-scrollbar-thumb:hover {
   box-shadow: var(--glow);
 }
 
-/* Ajout d'effets lumineux */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-      circle at 20% 30%,
-      rgba(99, 102, 241, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 70%,
-      rgba(139, 92, 246, 0.1) 0%,
-      transparent 50%
-    );
-  pointer-events: none;
-  z-index: -1;
+::-webkit-scrollbar-thumb:hover {
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.6);
 }
 
+/* --- Messages Flash --- */
+.flash-message-container {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000; /* Très haut pour être au-dessus de tout */
+  padding: 1rem 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  font-weight: 600;
+  text-align: center;
+  opacity: 1;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  border: 1px solid;
+  max-width: 90%;
+}
+
+.flash-message-container.flash-info {
+  background-color: rgba(99, 102, 241, 0.15); /* Couleur primaire avec transparence */
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.flash-message-container.flash-success {
+  background-color: rgba(16, 185, 129, 0.15); /* Vert avec transparence */
+  color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.flash-message-container.flash-warning {
+  background-color: rgba(245, 158, 11, 0.15); /* Orange avec transparence */
+  color: var(--warning-color);
+  border-color: var(--warning-color);
+}
+
+.flash-message-container.flash-danger {
+  background-color: rgba(239, 68, 68, 0.15); /* Rouge avec transparence */
+  color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+/* --- Responsive Design --- */
 @media (max-width: 1024px) {
+  .header-container {
+    padding: 0 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .brand-title {
+    font-size: 1.5rem;
+  }
+
+  /* Main passe en colonne sur les petits écrans */
   main {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Une seule colonne */
+    margin: 1rem; /* Marge générale autour du main sur mobile */
+    padding: 0; /* Padding interne à 0, géré par aside/content */
+    min-height: calc(100vh - var(--header-height) - var(--footer-height) - 2rem); /* 2rem pour les marges top/bottom de main */
   }
 
   aside {
-    position: static;
+    position: static; /* Retire le sticky */
     border-right: none;
     border-bottom: 1px solid var(--border-color);
+    margin-left: 0; /* Retire la marge négative sur mobile */
+    padding-left: 24px; /* Rétablit le padding normal de l'aside */
+    height: auto; /* Permet à l'aside de s'adapter à son contenu */
   }
 
-  #evenements,
-  #favoris,
-  #details {
-    grid-column: 1 / 2;
-  }
-
-  header h1 {
-    font-size: 2.5rem;
+  .content {
+    margin-right: 0; /* Retire la marge négative sur mobile */
+    padding: 24px; /* Rétablit le padding normal du content */
   }
 
   section {
-    padding: 24px;
+    margin-bottom: 24px; /* Ajuste l'espacement des sections */
   }
 }
 
 @media (max-width: 768px) {
-  header {
-    padding: 40px 20px;
+  .header-container {
+    padding: 0 1rem;
+    flex-direction: column;
+    min-height: auto;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    align-items: flex-start; /* Aligne les éléments du header à gauche */
   }
 
-  header h1 {
-    font-size: 2rem;
+  .main-nav {
+    order: 3; /* Déplace la navigation en bas dans l'ordre flex */
+    width: 100%;
+    flex-direction: column;
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-top: 1rem;
+    border: 1px solid var(--border-color);
+    display: none; /* Caché par défaut en mobile, géré par JS */
+  }
+
+  .main-nav.mobile-active {
+    display: flex; /* Affiché quand la classe est active par JS */
+    animation: slideDown 0.3s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .nav-item {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 1rem 1.25rem;
+    margin: 0.25rem 0;
+  }
+
+  .user-menu { /* Si tu as un menu utilisateur séparé du dropdown */
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    width: 100%;
+  }
+
+  .brand {
+    width: 100%; /* S'assure que le brand prend toute la largeur */
+    justify-content: center; /* Centre le logo/titre */
+    margin-bottom: 1rem; /* Espacement avant le toggle */
+  }
+
+  .brand-title {
+    font-size: 1.75rem; /* Ajuste la taille du titre du brand */
+  }
+
+  .mobile-menu-toggle {
+    display: flex; /* Affiche le bouton hamburger */
+    order: 2; /* Positionne le toggle après le brand et avant la nav */
+    position: absolute; /* Permet de le positionner précisément */
+    top: 1rem;
+    right: 1rem;
   }
 
   section {
-    padding: 20px;
+    padding: 20px 0; /* Ajuste le padding des sections sur petits mobiles */
+  }
+
+  #events-list li,
+  #favorites-list li {
+    flex-direction: column; /* Empile les éléments de liste */
+    align-items: center;
+    text-align: center;
   }
 
   #events-list img,
   #favorites-list img {
-    width: 100px;
-    height: 70px;
+    width: 100%; /* L'image prend toute la largeur */
+    max-width: 200px; /* Limite la taille de l'image */
+    height: auto; /* Hauteur automatique pour l'aspect ratio */
+    margin-bottom: 12px;
   }
 
-  main {
-    gap: 0;
+  .event-info {
+    align-items: center; /* Centre le texte */
   }
+
+  .event-detail-content {
+    grid-template-columns: 1fr; /* Les détails d'événement passent en colonne */
+  }
+
+  .event-detail-image {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .event-detail-title {
+    font-size: 2rem;
+  }
+
+  .event-detail-artist {
+    font-size: 1.2rem;
+  }
+
+  .event-detail-info-grid {
+    grid-template-columns: 1fr; /* Une seule colonne pour les infos */
+  }
+}
+
+/* --- Accessibilité et Performances --- */
+.nav-item:focus,
+.dropdown-item:focus,
+.logout-btn:focus,
+button:focus,
+select:focus,
+.category-item:focus,
+.favorite-button:focus,
+.mobile-menu-toggle:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Animations d'entrée */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Amélioration des performances par will-change */
+.main-header,
+.main-nav,
+.dropdown-menu,
+.user-menu, /* si toujours utilisé */
+main,
+.main-footer {
+  will-change: transform, opacity;
 }

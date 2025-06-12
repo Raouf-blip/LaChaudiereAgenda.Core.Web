@@ -35,6 +35,8 @@ class SigninAction
         // Note: SessionAuthProvider doesn't have isSignedIn() method, use isAuthenticated() instead
         if ($this->authProvider->isAuthenticated()) {
             $url = $routeParser->urlFor('home'); // Assuming 'home' is the name of your home route
+            $_SESSION['flash_message'] = 'Vous êtes déjà connecté';
+            $_SESSION['flash_message_type'] = 'error';
             return $response->withHeader('Location', $url)->withStatus(302);
         }
 

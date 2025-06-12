@@ -1,19 +1,8 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>La Chaudière Agenda</title>
-    <link rel="stylesheet" href="/css/style.css" />
-</head>
-<body>
-<header>
-    <h1>La Chaudière Agenda</h1>
-</header>
+{# src/web/templates/index.twig #}
+{% extends 'layout.twig' %}
 
-<main>
+{% block content %}
     <aside>
-        <!-- Filtrage par catégorie -->
         <section id="filtrage">
             <h2>Filtres</h2>
             <label for="category-filter">Filtrer par catégorie :</label>
@@ -23,7 +12,6 @@
             </select>
         </section>
 
-        <!-- Tri des événements -->
         <section id="tri">
             <h2>Trier les événements</h2>
             <label for="sort-options">Trier par :</label>
@@ -36,28 +24,26 @@
     </aside>
 
     <div class="content">
-        <!-- Événements affichés (mois courant ou filtré ou par clic) -->
         <section id="evenements">
-            <h2>Événements</h2>
+            <h2 class="section-title">Événements à venir</h2>
             <button id="show-favorites">Voir mes favoris</button>
             <ul id="events-list"></ul>
         </section>
 
-        <!-- Favoris -->
         <section id="favoris" style="display:none;">
-            <h2>Mes favoris</h2>
-            <button id="hide-favorites">Retour aux événements</button>
+            <h2 class="section-title">Mes favoris</h2>
+            <button id="hide-favorites" class="secondary">Retour aux événements</button>
             <ul id="favorites-list"></ul>
         </section>
 
-        <!-- Détails (prévu pour plus tard) -->
         <section id="details" style="display:none;">
-            <h2>Détails</h2>
+            <h2 class="section-title">Détails de l'événement</h2>
             <div id="evenement-details"></div>
         </section>
     </div>
-</main>
+{% endblock content %}
 
-<script type="module" src="/js/app.js"></script>
-</body>
-</html>
+{# Add page-specific JavaScript here if needed, or link to app.js #}
+{% block javascripts %}
+    {{ parent() }} {# This calls the javascripts block from layout.twig first #}
+{% endblock %}
