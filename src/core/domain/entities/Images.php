@@ -7,11 +7,12 @@ use Chaudiere\core\domain\entities\Events;
 
 class Images extends Model {
 
-    protected $table = 'images';
-    protected $primaryKey = 'id';
     public $timestamps = false;
+    protected $table = 'images';
+    protected $keyType = 'string';
+    public $incrementing = false;
 
-    protected $keyType = "string";
+    protected $fillable = ['id', 'name'];
 
     public function events() {
         return $this->hasMany(Events::class, 'image_id', 'id');

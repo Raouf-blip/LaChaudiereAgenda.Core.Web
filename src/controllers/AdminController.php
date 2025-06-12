@@ -2,6 +2,7 @@
 
 namespace Chaudiere\controllers;
 
+use Slim\Views\Twig;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Chaudiere\core\domain\entities\Events;
@@ -11,9 +12,9 @@ use Slim\Psr7\UploadedFile;
 
 class AdminController
 {
-    public function createEvent($request, $response, $args)
+    public function createEvent(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $twig = \Slim\Views\Twig::fromRequest($request);
+        $twig = Twig::fromRequest($request);
         $categories = Categories::all();
         $params = [];
 
@@ -25,33 +26,35 @@ class AdminController
             $uploadedFile = $uploadedFiles['image_file'] ?? null;
 
             if ($uploadedFile instanceof UploadedFile && $uploadedFile->getError() === UPLOAD_ERR_OK) {
-                $uploadDirectory = __DIR__ . '../../public/img';
+                $uploadDirectory = __DIR__ . '/../../public/img';
+
                 if (!is_dir($uploadDirectory)) {
                     mkdir($uploadDirectory, 0777, true);
                 }
 
-                $filename = moveUploadedFile($uploadDirectory, $uploadedFile);
+                $filename = $this->moveUploadedFile($uploadDirectory, $uploadedFile);
 
-                $image = new Images();
-                $image->id = uniqid();
-                $image->name = $filename;
-                $image->save();
+                $image = Images::create([
+                    'id' => uniqid(),
+                    'name' => $filename
+                ]);
 
                 $imageId = $image->id;
             }
 
+
             Events::create([
-                'id' => uniqid(),
-                'title' => $data['title'],
-                'description' => $data['description'],
-                'start_date' => $data['start_date'],
-                'end_date' => $data['end_date'],
-                'start_time' => $data['start_time'] ?: null,
-                'end_time' => $data['end_time'] ?: null,
-                'price' => $data['price'] ?: 0,
-                'image_id' => $imageId,
-                'category_id' => $data['category_id'],
-                'created_by' => null,
+                'id'           => uniqid(),
+                'title'        => $data['title'],
+                'description'  => $data['description'],
+                'start_date'   => $data['start_date'],
+                'end_date'     => $data['end_date'],
+                'start_time'   => $data['start_time'] ?: null,
+                'end_time'     => $data['end_time'] ?: null,
+                'price'        => $data['price'] ?: 0,
+                'image_id'     => $imageId,
+                'category_id'  => $data['category_id'],
+                'created_by'   => null,
                 'is_published' => isset($data['is_published'])
             ]);
 
