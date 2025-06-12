@@ -1,17 +1,22 @@
+version: "3.8"
+
 networks:
   sae.net:
     driver: bridge
+
+volumes:
+  mysql_data:
 
 services:
   mysql-db:
     image: mysql:8.0
     container_name: mysql-chaudiere
     restart: unless-stopped
-    ports:
-      - "${MYSQL_PORT}:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "${MYSQL_PORT}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -21,11 +26,21 @@ services:
     image: mysql:8.0
     depends_on:
       - mysql-db
-    entrypoint: |
+    entrypoint: >
       sh -c "
-      sleep 20 && \
-      mysql -h mysql-db -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /sql/schema.sql && \
-      mysql -h mysql-db -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /sql/data.sql
+      until mysqladmin ping -h mysql-db -u root -p${MYSQL_ROOT_PASSWORD} --silent; do
+        echo '⏳ En attente de MySQL...'; sleep 2;
+      done
+
+      if [ ! -f /sql/.done ]; then
+        echo '🚀 Initialisation de la base de données...';
+        mysql -h mysql-db -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /sql/schema.sql && \
+        mysql -h mysql-db -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /sql/data.sql && \
+        touch /sql/.done && \
+        echo '✅ Base de données initialisée.';
+      else
+        echo 'ℹ️ La base est déjà initialisée, on skip.';
+      fi
       "
     volumes:
       - ./src/db:/sql
@@ -39,7 +54,7 @@ services:
     ports:
       - "${PHPMYADMIN_PORT}:80"
     environment:
-      PMA_HOST: ${PMA_HOST}
+      PMA_HOST: mysql-db
       PMA_USER: ${PMA_USER}
       PMA_PASSWORD: ${PMA_PASSWORD}
     depends_on:
@@ -51,17 +66,25 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    volumes:
+      - ./:/var/www
+    working_dir: /var/www
+    expose:
+      - 9000
+    depends_on:
+      - mysql-db
+    networks:
+      - sae.net
+
+  web:
+    image: nginx:alpine
+    container_name: nginx-chaudiere
     ports:
       - "${APP_PORT}:80"
     volumes:
-      - ./:/var/www/html
-      - ./public/img:/var/www/html/public/img
-    working_dir: /var/www/html
+      - ./:/var/www
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
     networks:
       - sae.net
-    depends_on:
-      - mysql-db
-    command: php -S 0.0.0.0:80 -t /var/www/html/public /var/www/html/public/router.php
-
-volumes:
-  mysql_data:

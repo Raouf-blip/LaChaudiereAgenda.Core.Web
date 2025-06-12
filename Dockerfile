@@ -1,22 +1,19 @@
-FROM php:8.4-cli
+FROM php:8.3-fpm
 
-RUN apt-get update && \
-    apt-get install --yes --force-yes \
-    cron openssl
+# Installer extensions nécessaires
+RUN apt-get update && apt-get install -y \
+    git unzip libzip-dev libpq-dev libonig-dev libxml2-dev \
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql
 
-RUN curl -sSLf \
-        -o /usr/local/bin/install-php-extensions \
-        https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
-    chmod +x /usr/local/bin/install-php-extensions
+# Installer Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-RUN install-php-extensions gettext iconv intl tidy zip sockets \
-    && install-php-extensions pgsql mysqli \
-    && install-php-extensions pdo_mysql pdo_pgsql \
-    && install-php-extensions @composer
+# Préparation du dossier de travail
+WORKDIR /var/www
 
-WORKDIR /app
-COPY . /app
+# Copier le code et installer les dépendances
+COPY . /var/www
+RUN composer install --no-dev --optimize-autoloader
 
-EXPOSE 10000
-
-CMD ["php", "-S", "0.0.0.0:10000", "-t", "public"]
+# Permissions (si nécessaire)
+RUN chown -R www-data:www-data /var/www
