@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Événements à Venir</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="header-container">
+        <a href="/" class="brand">
+            <h1 class="brand-title">LaChaudièreAgenda</h1>
+        </a>
+        <nav class="main-nav">
+
+            <a href="/" class="nav-item">
+                <i class="fas fa-home"></i> Accueil
+            </a>
+
+            <div id="adminDiv"></div>
+
+            <a href="/signin" class="nav-item auth-btn signin-btn">
+                <i class="fas fa-sign-in-alt"></i> Connexion
+            </a>
+            <a href="/signup" class="nav-item auth-btn signup-btn">
+                <i class="fas fa-user-plus"></i> Inscription
+            </a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <aside>
+        <section id="filtrage">
+            <h2>Filtres</h2>
+            <label for="category-filter">Filtrer par catégorie :</label>
+            <div id="categorie-list">Chargement...</div>
+            <select id="category-filter">
+                <option value="">Toutes les catégories</option>
+            </select>
+        </section>
+
+        <section id="tri">
+            <h2>Trier les événements</h2>
+            <label for="sort-options">Trier par :</label>
+            <select id="sort-options">
+                <option value="date-asc">Date (croissant)</option>
+                <option value="date-desc">Date (décroissant)</option>
+                <option value="titre">Titre</option>
+            </select>
+        </section>
+    </aside>
+
+    <div class="content">
+        <section id="evenements">
+            <h2 class="section-title">Événements à venir</h2>
+            <button id="show-favorites">Voir mes favoris</button>
+            <ul id="events-list"></ul>
+        </section>
+
+        <section id="favoris" style="display:none;">
+            <h2 class="section-title">Mes favoris</h2>
+            <button id="hide-favorites" class="secondary">Retour aux événements</button>
+            <ul id="favorites-list"></ul>
+        </section>
+
+        <section id="details" style="display:none;">
+            <h2 class="section-title">Détails de l'événement</h2>
+            <div id="evenement-details"></div>
+        </section>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.min.js"></script>
+
+<script id="event-list-template" type="text/x-handlebars-template">
+    {{#if events}}
+    {{#each events}}
+    <li data-event-id="{{id}}">
+        {{#if image}}
+        <img src="/img/{{image.name}}" alt="{{title}}">
+        {{/if}}
+        <div class="event-info">
+            <h4 class="event-title">{{title}}</h4>
+            <p class="event-date">{{artist}} • {{formatDate start_date}}</p>
+        </div>
+        <div class="event-buttons">
+            <button class="details-btn">Détails</button>
+            <button class="favorite-button {{#if isFavorite}}is-favorite{{/if}}" data-event-id="{{id}}">
+                <span class="heart">{{#if isFavorite}}❤️{{else}}🤍{{/if}}</span> {{#if
+                isFavorite}}Favori{{else}}Ajouter{{/if}}
+            </button>
+        </div>
+    </li>
+    {{/each}}
+    {{else}}
+    <li>Aucun événement ne correspond à votre recherche.</li>
+    {{/if}}
+</script>
+
+<script id="favorite-list-template" type="text/x-handlebars-template">
+    {{#if favoriteEvents}}
+    {{#each favoriteEvents}}
+    <li data-event-id="{{id}}">
+        {{#if image}}
+        <img src="/img/{{image.name}}" alt="{{title}}">
+        {{/if}}
+        <span>{{title}} – {{artist}} – {{formatDate start_date}} – {{category.name}}</span>
+        <button class="details-btn">Détails</button>
+        <button class="favorite-button is-favorite" data-event-id="{{id}}">
+            <span class="heart">❤️</span> Retirer
+        </button>
+    </li>
+    {{/each}}
+    {{else}}
+    <li>Vous n'avez aucun événement en favori.</li>
+    {{/if}}
+</script>
+
+<script id="event-details-template" type="text/x-handlebars-template">
+    <div class="event-detail-content">
+        {{#if image}}
+        <img src="/img/{{image.name}}" alt="{{title}}" class="event-detail-image">
+        {{/if}}
+        <div class="event-detail-text">
+            <h2 class="event-detail-title">{{title}}</h2>
+            <h3 class="event-detail-artist">{{artist}}</h3>
+
+            <div class="event-detail-info-grid">
+                <div class="info-item">
+                    <span>📅 Date</span>
+                    <p>{{formatFullDate start_date}}</p>
+                </div>
+                <div class="info-item">
+                    <span>🏷️ Catégorie</span>
+                    <p>{{category.name}}</p>
+                </div>
+                {{#if price}}
+                <div class="info-item">
+                    <span>💰 Prix</span>
+                    <p>{{price}} €</p>
+                </div>
+                {{/if}}
+            </div>
+            <p class="event-detail-description">{{description}}</p>
+        </div>
+    </div>
+    <div class="event-detail-actions">
+        <button class="favorite-button {{#if isFavorite}}is-favorite{{/if}}" data-event-id="{{id}}">
+            <span class="heart">{{#if isFavorite}}❤️{{else}}🤍{{/if}}</span> {{#if isFavorite}}Retirer des
+            favoris{{else}}Ajouter aux favoris{{/if}}
+        </button>
+        <button class="back-button">Retour à la liste</button>
+    </div>
+</script>
+
+<script type="module" src="./js/api.js"></script>
+<script type="module" src="./js/favorites.js"></script>
+<script type="module" src="./js/ui.js"></script>
+<script type="module" src="./js/app.js"></script>
+
+<script>
+    async function showAdminButton() {
+    try {
+        const res = await fetch('/api/role');
+        const role = await res.text();
+        const container = document.getElementById('adminDiv');
+
+        if (parseInt(role) === 1 || parseInt(role) === 50) {
+            container.innerHTML = '<a href="/admin/create/user" class="nav-item"><i class="fas fa-tools"></i> Administration</a>';
+        }
+    } catch (e) {
+        console.error('Erreur de récupération du rôle :', e);
+    }
+}
+
+showAdminButton()
+</script>
+
+</body>
+</html>

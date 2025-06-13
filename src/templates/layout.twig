@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Event Creation{% endblock %}</title>
+
+    <title>{% block title %}La Chaudière Agenda{% endblock %}</title>
 
     {# Anti XSS #}
     <meta http-equiv="Content-Security-Policy"
@@ -14,8 +15,116 @@
 
     {# Empêche certains types de XSS dans les vieux navigateurs #}
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    {% block stylesheets %}{% endblock %}
 </head>
 <body>
+<header class="main-header">
+    <div class="header-container">
+        <a href="/" class="brand">
+            <h1 class="brand-title">LaChaudièreAgenda</h1>
+        </a>
+        <nav class="main-nav">
+            <a href="/" class="nav-item">
+                <i class="fas fa-home"></i> Accueil
+            </a>
+            {% if auth.isAuthenticated() %}
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-item dropdown-trigger">
+                        <i class="fas fa-user-circle"></i> {{ auth.getSignedInUser() ? auth.getSignedInUser().email : 'Non connecté' }}
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        {% if auth.canManageUsers() %}
+                            <a href="/admin/create/user" class="dropdown-item">
+                                <i class="fas fa-user-plus"></i> Créer un admin
+                            </a>
+                        {% endif %}
+                        <a href="/signout" class="dropdown-item logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Déconnexion
+                        </a>
+                    </div>
+                </div>
+            {% else %}
+                <a href="/signin" class="nav-item auth-btn signin-btn">
+                    <i class="fas fa-sign-in-alt"></i> Connexion
+                </a>
+                <a href="/signup" class="nav-item auth-btn signup-btn">
+                    <i class="fas fa-user-plus"></i> Inscription
+                </a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<main>
+    {# --- FLASH MESSAGE CONTAINER --- #}
+    {% if flash_message %}
+        <div class="flash-message-container flash-{{ flash_message_type | default('info') }}">
+            {{ flash_message | raw }}
+        </div>
+    {% endif %}
+    {# ------------------------------------ #}
+
     {% block content %}{% endblock %}
+</main>
+
+<footer class="main-footer">
+    <div class="footer-container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <p>&copy; {{ "now"|date("Y") }} La Chaudière Agenda. Tous droits réservés.</p>
+            </div>
+            <div class="footer-user-status">
+                Statut :
+                {% if auth.isAuthenticated() %}
+                    <span class="status-indicator connected"></span> Connecté
+                {% else %}
+                    <span class="status-indicator disconnected"></span> Déconnecté
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</footer>
+
+{% block javascripts %}
+    <script>
+        // Script pour la gestion des messages flash
+        document.addEventListener('DOMContentLoaded', function () {
+            const flashMessage = document.querySelector('.flash-message-container');
+            if (flashMessage) {
+                setTimeout(() => {
+                    flashMessage.style.transition = 'opacity 0.5s ease-out';
+                    flashMessage.style.opacity = '0';
+                    setTimeout(() => {
+                        flashMessage.remove();
+                    }, 500);
+                }, 5000);
+            }
+
+            // Script pour le menu déroulant (dropdown)
+            const dropdownTrigger = document.querySelector('.nav-dropdown .dropdown-trigger');
+            const navDropdown = document.querySelector('.nav-dropdown');
+
+            if (dropdownTrigger && navDropdown) {
+                dropdownTrigger.addEventListener('click', function (event) {
+                    event.preventDefault(); // Empêche le lien de naviguer
+                    navDropdown.classList.toggle('active');
+                });
+
+                // Ferme le dropdown si on clique en dehors
+                document.addEventListener('click', function (event) {
+                    if (!navDropdown.contains(event.target) && navDropdown.classList.contains('active')) {
+                        navDropdown.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="js/app.js" type="module"></script>
+{% endblock %}
 </body>
 </html>

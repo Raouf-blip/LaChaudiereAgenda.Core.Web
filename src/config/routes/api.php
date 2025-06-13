@@ -1,5 +1,7 @@
 <?php
 
+use Chaudiere\core\domain\repositories\UserRepository;
+use Chaudiere\core\providers\SessionAuthProvider;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Chaudiere\core\domain\entities\Events;
@@ -8,11 +10,6 @@ use Chaudiere\core\domain\entities\Images;
 use Slim\Views\Twig;
 
 return function($app) {
-
-    $app->get('/', function (Request $request, Response $response) {
-        $view = Twig::fromRequest($request);
-        return $view->render($response, 'index.twig');
-    });
 
 // gerer les réponses JSON
     function jsonResponse(Response $response, $data, int $status = 200): Response {
@@ -130,5 +127,15 @@ return function($app) {
         ]));
 
         return $response->withHeader('Content-Type', 'application/json');
+    });
+
+    $app->get('/api/role', function (Request $request, Response $response) {
+        $userRepo = new UserRepository();
+        $auth = new SessionAuthProvider($userRepo); // ✅ correction ici
+
+        $role = $auth->getUserRole() ?? 0;
+
+        $response->getBody()->write((string)$role);
+        return $response->withHeader('Content-Type', 'text/plain');
     });
 };
