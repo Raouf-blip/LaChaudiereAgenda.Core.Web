@@ -1,6 +1,7 @@
 <?php
 
 use Chaudiere\core\actions\get\GetCreateAdminUserAction;
+use Chaudiere\core\actions\get\GetEventListAction;
 use Chaudiere\core\actions\SigninAction;
 use Chaudiere\core\actions\SignoutAction;
 use Chaudiere\core\actions\SignupAction;
@@ -16,7 +17,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
-use Slim\Csrf\Guard;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -51,9 +51,7 @@ $container->set(AuthnService::class, function ($c) {
 // Création de l'app
 $app = AppFactory::create();
 
-// CSRF
-$csrf = new Guard($app->getResponseFactory());
-$csrf->setPersistentTokenMode(true); // optionnel mais utile en dev
+
 
 // Configuration de Twig
 $twig = Twig::create(__DIR__ . '/../src/templates', ['cache' => false]);
@@ -92,40 +90,17 @@ $app->add(function ($request, $handler) {
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 });
 
-$app->add(new AuthMiddleware($authProvider, [
-]));
+$app->add(new AuthMiddleware($authProvider));
 
 // Middleware
 $app->addRoutingMiddleware();
 $app->add(CorsMiddleware::class);
 $app->add(TwigMiddleware::create($app, $twig));
-$app->add($csrf);
 
-// Middleware pour injecter dynamiquement les tokens CSRF
-$app->add(function (Request $request, $handler) use ($twig, $csrf) {
-    $csrfNameKey = $csrf->getTokenNameKey();
-    $csrfValueKey = $csrf->getTokenValueKey();
-    $csrfName = $request->getAttribute($csrfNameKey);
-    $csrfValue = $request->getAttribute($csrfValueKey);
 
-    $twig->getEnvironment()->addGlobal('csrf', [
-        'keys' => [
-            'name' => $csrfNameKey,
-            'value' => $csrfValueKey
-        ],
-        'name' => $csrfName,
-        'value' => $csrfValue
-    ]);
 
-    return $handler->handle($request);
-});
 
 $app->addErrorMiddleware(true, true, true);
-
-// OPTIONS
-$app->options('/{routes:.+}', function ($request, $response) {
-    return $response;
-});
 
 // Routes
 (require __DIR__ . '/../src/config/routes/api.php')($app);
@@ -157,6 +132,6 @@ $app->get('/', function (Request $request, Response $response) {
     return $response->withHeader('Location', 'index.html')->withStatus(302);
 })->setName('home');
 
-
+$app->get('/admin/events', GetEventListAction::class)->setName('events');
 
 $app->run();

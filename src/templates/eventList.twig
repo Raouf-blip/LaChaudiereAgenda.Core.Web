@@ -1,0 +1,73 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{ page_title }} - Administration{% endblock %}
+
+{% block content %}
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/css/events.css"> {# Add this line #}
+        {# You might also have a main style.css here #}
+    </head>
+
+
+    <div class="content">
+        <h2>{{ page_title }}</h2>
+        {# Formulaire de Filtrage et Tri #}
+        <form action="{{ url_for('events') }}" method="get" class="filter-sort-form">
+            <div class="form-group">
+                <label for="category-filter">Filtrer par catégorie :</label>
+                <select name="category_id" id="category-filter" onchange="this.form.submit()">
+                    <option value="">Toutes les catégories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if selected_category_id == category.id %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="sort-by">Trier par :</label>
+                <select name="sort_by" id="sort-by" onchange="this.form.submit()">
+                    <option value="date_asc" {% if selected_sort_by == 'date_asc' %}selected{% endif %}>Date (croissant)</option>
+                    <option value="date_desc" {% if selected_sort_by == 'date_desc' %}selected{% endif %}>Date (décroissant)</option>
+                    <option value="title_asc" {% if selected_sort_by == 'title_asc' %}selected{% endif %}>Titre (A-Z)</option>
+                </select>
+            </div>
+        </form>
+
+        {# Liste des événements #}
+        {% if events is not empty %}
+            <table class="event-table">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Catégorie</th>
+                        <th>Date(s)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                        <tr>
+                            <td>{{ event.title }}</td>
+                            <td>{{ event.category.name }}</td> {# Supposons que l'événement a une propriété 'category' avec un 'name' #}
+                            <td>
+                                {% if event.start_date and event.end_date %}
+                                    Du {{ event.start_date|date('d/m/Y') }} au {{ event.end_date|date('d/m/Y') }}
+                                {% elseif event.start_date %}
+                                    Le {{ event.start_date|date('d/m/Y') }}
+                                {% else %}
+                                    Date non spécifiée
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Aucun événement trouvé.</p>
+        {% endif %}
+    </div>
+{% endblock %}

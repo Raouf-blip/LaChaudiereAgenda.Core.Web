@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '34fcdb16a9d798d9f620fd9011c1009877497a80',
+        'reference' => '29c7a0e9e73f6c4aef2b0600514dad918ab1aad8',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '34fcdb16a9d798d9f620fd9011c1009877497a80',
+            'reference' => '29c7a0e9e73f6c4aef2b0600514dad918ab1aad8',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -310,6 +310,15 @@
             'replaced' => array(
                 0 => '4.8.1',
             ),
+        ),
+        'slim/csrf' => array(
+            'pretty_version' => '1.5.0',
+            'version' => '1.5.0.0',
+            'reference' => '179cbcf40ee1d246d4906aefed42d3e62066974b',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../slim/csrf',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'slim/psr7' => array(
             'pretty_version' => '1.7.1',
