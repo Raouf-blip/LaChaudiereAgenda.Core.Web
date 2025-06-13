@@ -8,17 +8,17 @@
 | ----------------- | ------- | ----------- |
 | Fonctionnalité 1  | Fait    |   Raouf     |
 | Fonctionnalité 2  | Fait    |   Raouf     |
-| Fonctionnalité 3  | À faire |             |
-| Fonctionnalité 4  | À faire |             |
-| Fonctionnalité 5  | À faire |             |
-| Fonctionnalité 6  | À faire |             |
+| Fonctionnalité 3  | À faire |      Semih       |
+| Fonctionnalité 4  | À faire |     Semih        |
+| Fonctionnalité 5  | À faire |       Semih      |
+| Fonctionnalité 6  | À faire |        Semih     |
 | Fonctionnalité 7  | Fait    |   Raouf     |
 | Fonctionnalité 8  | Fait    |   Raouf     |
 | Fonctionnalité 9  | Fait    |   Raouf     |
 | Fonctionnalité 10 | Fait    |   Raouf     |
 | Fonctionnalité 11 | Fait    |   Raouf     |
 | Fonctionnalité 12 | Encours |   Raouf     |
-| Fonctionnalité 13 | À faire |             |
+| Fonctionnalité 13 | À faire |    Semih         |
 | Fonctionnalité 14 | Fait    |   Raouf     |
 
 # Tableau de bord WEB :
