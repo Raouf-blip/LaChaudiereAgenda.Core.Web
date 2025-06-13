@@ -7,6 +7,7 @@ use Chaudiere\core\actions\SignupAction;
 use Chaudiere\core\domain\repositories\UserRepository;
 use Chaudiere\core\providers\SessionAuthProvider;
 use Chaudiere\core\UseCase\AuthnService;
+use Chaudiere\middleware\AuthMiddleware;
 use Chaudiere\middleware\CorsMiddleware;
 use Chaudiere\middleware\FlashMessageMiddleware;
 use DI\Container;
@@ -68,6 +69,11 @@ $container->set(SigninAction::class, function ($c) {
     );
 });
 
+// Dans votre index.php
+$container->set(SignoutAction::class, function ($c) {
+    return new SignoutAction($c->get(AuthnService::class));
+});
+
 $twig->getEnvironment()->addGlobal('auth', $authProvider);
 
 
@@ -78,6 +84,12 @@ $app->add(function ($request, $handler) {
         ->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 });
+
+// ✨ AJOUT DU MIDDLEWARE D'AUTHENTIFICATION
+$app->add(new AuthMiddleware($authProvider, [
+    // Vous pouvez ajouter d'autres routes publiques ici si nécessaire
+    // 'home', // par exemple si vous voulez que la page d'accueil soit publique
+]));
 
 // Middleware
 $app->addRoutingMiddleware();

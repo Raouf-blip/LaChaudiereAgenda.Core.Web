@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Chaudiere\core\actions;
 
-use Chaudiere\core\domain\repositories\UserRepository; // You should remove this and inject it if you're using DI
+use Chaudiere\core\domain\repositories\UserRepository;
 use Chaudiere\core\providers\SessionAuthProvider;
 use Chaudiere\core\UseCase\AuthnService;
 use Chaudiere\core\UseCase\AuthnServiceInterface;
@@ -17,8 +17,6 @@ class SigninAction
     private AuthnServiceInterface $authnService;
     private SessionAuthProvider $authProvider;
 
-    // Use Dependency Injection for the constructor
-    // Your index.php should configure the container to pass these.
     public function __construct(AuthnServiceInterface $authnService, SessionAuthProvider $authProvider)
     {
         $this->authnService = $authnService;
@@ -29,10 +27,9 @@ class SigninAction
     {
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
         $view = Twig::fromRequest($request);
-        $viewData = []; // To pass data to Twig, e.g., error messages
+        $viewData = [];
 
-        // IMPORTANT: Check authentication status using your authProvider
-        // If already signed in, redirect to home
+        // Vérifier si l'utilisateur est déjà connecté
         if ($this->authProvider->isAuthenticated()) {
             $_SESSION['flash_message'] = 'Vous êtes déjà connecté.';
             $_SESSION['flash_message_type'] = 'info';
@@ -47,40 +44,37 @@ class SigninAction
             $password = $params['password'] ?? '';
 
             try {
-                // AuthnService::verifyCredentials already handles setting the session
-                // by calling $this->authProvider->setActiveUserId() on success.
+                // Vérifier les identifiants
                 $user = $this->authnService->verifyCredentials($email, $password);
 
                 if ($user) {
-                    // Authentication successful, session is already set by verifyCredentials
+                    // ✨ CORRECTION IMPORTANTE : Connecter explicitement l'utilisateur
+                    $this->authProvider->login($user);
+
+                    // Alternativement, si votre AuthnService a une méthode pour ça :
+                    // $this->authnService->login($user);
+
                     $_SESSION['flash_message'] = 'Connexion réussie ! Bienvenue.';
                     $_SESSION['flash_message_type'] = 'success';
 
-                    $url = $routeParser->urlFor('home'); // Redirect to your home page
+                    $url = $routeParser->urlFor('home');
                     return $response->withHeader('Location', $url)->withStatus(302);
 
                 } else {
-                    // Authentication failed (email/password mismatch)
                     $_SESSION['flash_message'] = 'Email ou mot de passe invalide.';
                     $_SESSION['flash_message_type'] = 'error';
-                    // The FlashMessageMiddleware will display this on the signin.twig page.
-                    // No redirect needed here, just fall through to rendering the form.
                 }
 
             } catch (\InvalidArgumentException $e) {
-                // Catch validation errors (e.g., empty email/password) from AuthnService
                 $_SESSION['flash_message'] = "Erreur de saisie : " . $e->getMessage();
                 $_SESSION['flash_message_type'] = 'error';
             } catch (\Exception $e) {
-                // Catch any other unexpected errors
-                error_log("Signin error: " . $e->getMessage()); // Log the actual error
+                error_log("Signin error: " . $e->getMessage());
                 $_SESSION['flash_message'] = "Une erreur inattendue est survenue lors de la connexion.";
                 $_SESSION['flash_message_type'] = 'error';
             }
         }
 
-        // For GET requests or POST requests that failed validation/authentication,
-        // render the signin form. Flash messages will be handled by FlashMessageMiddleware.
         return $view->render($response, 'signin.twig', $viewData);
     }
 }
