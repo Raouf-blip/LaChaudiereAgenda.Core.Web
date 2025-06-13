@@ -29,17 +29,17 @@ services:
     entrypoint: >
       sh -c "
       until mysqladmin ping -h mysql-db -u root -p${MYSQL_ROOT_PASSWORD} --silent; do
-        echo '⏳ En attente de MySQL...'; sleep 2;
+        echo 'En attente de MySQL...'; sleep 2;
       done
 
       if [ ! -f /sql/.done ]; then
-        echo '🚀 Initialisation de la base de données...';
+        echo 'Initialisation de la base de données...';
         mysql -h mysql-db -u root -p${MYSQL_ROOT_PASSWORD} < /sql/schema.sql && \
         mysql -h mysql-db -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /sql/data.sql && \
         touch /sql/.done && \
-        echo '✅ Base de données initialisée.';
+        echo 'Base de données initialisée.';
       else
-        echo 'ℹ️ La base est déjà initialisée, on skip.';
+        echo 'La base est déjà initialisée, on skip.';
       fi
       "
     volumes:
