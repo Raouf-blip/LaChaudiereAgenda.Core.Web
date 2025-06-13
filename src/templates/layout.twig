@@ -7,8 +7,7 @@
     <title>{% block title %}La Chaudière Agenda{% endblock %}</title>
 
     {# Anti XSS #}
-    <meta http-equiv="Content-Security-Policy"
-          content="default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; form-action 'self'; base-uri 'self';">
+
 
     {# Protection contre clickjacking #}
     <meta http-equiv="X-Frame-Options" content="DENY">
@@ -40,6 +39,9 @@
                         {% if auth.canManageUsers() %}
                             <a href="/admin/create/user" class="dropdown-item">
                                 <i class="fas fa-user-plus"></i> Créer un admin
+                            </a>
+                            <a href="/admin/event" class="dropdown-item">
+                                <i class="fas fa-calendar"></i> Consulter les événements
                             </a>
                             <a href="/admin/create/event" class="dropdown-item">
                                 <i class="fas fa-plus"></i> Créer un événement

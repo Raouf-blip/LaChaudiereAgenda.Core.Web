@@ -1,20 +1,17 @@
 {% extends 'layout.twig' %}
 
-{% block title %}{{ page_title }} - Administration{% endblock %}
 
 {% block content %}
 
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="/css/events.css"> {# Add this line #}
-        {# You might also have a main style.css here #}
+        <link rel="stylesheet" href="/css/events.css">
     </head>
 
 
     <div class="content">
         <h2>{{ page_title }}</h2>
-        {# Formulaire de Filtrage et Tri #}
         <form action="{{ url_for('events') }}" method="get" class="filter-sort-form">
             <div class="form-group">
                 <label for="category-filter">Filtrer par catégorie :</label>
@@ -38,7 +35,6 @@
             </div>
         </form>
 
-        {# Liste des événements #}
         {% if events is not empty %}
             <table class="event-table">
                 <thead>
@@ -52,7 +48,7 @@
                     {% for event in events %}
                         <tr>
                             <td>{{ event.title }}</td>
-                            <td>{{ event.category.name }}</td> {# Supposons que l'événement a une propriété 'category' avec un 'name' #}
+                            <td>{{ event.category.name }}</td>
                             <td>
                                 {% if event.start_date and event.end_date %}
                                     Du {{ event.start_date|date('d/m/Y') }} au {{ event.end_date|date('d/m/Y') }}
