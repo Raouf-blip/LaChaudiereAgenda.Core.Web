@@ -1,8 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Event Creation{% endblock %}</title>
+
+    {# Anti XSS #}
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; form-action 'self'; base-uri 'self';">
+
+    {# Protection contre clickjacking #}
+    <meta http-equiv="X-Frame-Options" content="DENY">
+
+    {# Empêche certains types de XSS dans les vieux navigateurs #}
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
 </head>
 <body>
     {% block content %}{% endblock %}

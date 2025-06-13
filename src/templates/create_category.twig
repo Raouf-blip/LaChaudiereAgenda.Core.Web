@@ -4,7 +4,7 @@
 <h2>Créer une catégorie</h2>
 
 {% if error %}
-    <p style="color: red;">{{ error }}</p>
+    <p style="color: red;">{{ error|e }}</p>
 {% endif %}
 
 {% if success %}
@@ -12,11 +12,15 @@
 {% endif %}
 
 <form method="POST" action="/admin/create/category">
-    <label for="name">Libellé :</label><br>
-    <input type="text" id="name" name="name" value="{{ old.name|default('') }}" required><br><br>
+    {# Protection CSRF #}
+    <input type="hidden" name="{{ csrf.keys.name }}" value="{{ csrf.name }}">
+    <input type="hidden" name="{{ csrf.keys.value }}" value="{{ csrf.value }}">
 
-    <label for="description">Description:</label><br>
-    <textarea id="description" name="description" rows="6" required>{{ old.description|default('') }}</textarea><br><br>
+    <label for="name">Libellé :</label><br>
+    <input type="text" id="name" name="name" value="{{ old.name|default('')|e }}" required><br><br>
+
+    <label for="description">Description :</label><br>
+    <textarea id="description" name="description" rows="6" required>{{ old.description|default('')|e }}</textarea><br><br>
 
     <button type="submit">Créer</button>
 </form>

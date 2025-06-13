@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>La Chaudière Agenda</title>
     <link rel="stylesheet" href="/css/style.css" />
+
+    <!-- 🛡️ Protection XSS via CSP -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';" />
 </head>
 <body>
 <header>
@@ -36,7 +40,7 @@
     </aside>
 
     <div class="content">
-        <!-- Événements affichés (mois courant ou filtré ou par clic) -->
+        <!-- Événements affichés -->
         <section id="evenements">
             <h2>Événements</h2>
             <button id="show-favorites">Voir mes favoris</button>
@@ -50,7 +54,7 @@
             <ul id="favorites-list"></ul>
         </section>
 
-        <!-- Détails (prévu pour plus tard) -->
+        <!-- Détails -->
         <section id="details" style="display:none;">
             <h2>Détails</h2>
             <div id="evenement-details"></div>

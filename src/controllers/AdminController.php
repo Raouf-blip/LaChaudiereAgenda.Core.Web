@@ -18,6 +18,21 @@ class AdminController
         $categories = Categories::all();
         $params = [];
 
+        // Récupération des jetons CSRF
+        $csrfNameKey = 'csrf_name';
+        $csrfValueKey = 'csrf_value';
+        $csrfName = $request->getAttribute($csrfNameKey);
+        $csrfValue = $request->getAttribute($csrfValueKey);
+
+        $params['csrf'] = [
+            'keys' => [
+                'name' => $csrfNameKey,
+                'value' => $csrfValueKey
+            ],
+            'name' => $csrfName,
+            'value' => $csrfValue
+        ];
+
         if ($request->getMethod() === 'POST') {
             $data = $request->getParsedBody();
 
@@ -41,7 +56,6 @@ class AdminController
 
                 $imageId = $image->id;
             }
-
 
             Events::create([
                 'id'           => uniqid(),
@@ -78,8 +92,23 @@ class AdminController
 
     public function createCategory(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $twig = \Slim\Views\Twig::fromRequest($request);
+        $twig = Twig::fromRequest($request);
         $params = [];
+
+        // CSRF
+        $csrfNameKey = 'csrf_name';
+        $csrfValueKey = 'csrf_value';
+        $csrfName = $request->getAttribute($csrfNameKey);
+        $csrfValue = $request->getAttribute($csrfValueKey);
+
+        $params['csrf'] = [
+            'keys' => [
+                'name' => $csrfNameKey,
+                'value' => $csrfValueKey
+            ],
+            'name' => $csrfName,
+            'value' => $csrfValue
+        ];
 
         if ($request->getMethod() === 'POST') {
             $data = $request->getParsedBody();
@@ -90,7 +119,7 @@ class AdminController
                 $params['error'] = 'Veuillez remplir tous les champs.';
                 $params['old'] = $data;
             } else {
-                \Chaudiere\core\domain\entities\Categories::create([
+                Categories::create([
                     'name' => $name,
                     'description' => $description
                 ]);
@@ -100,5 +129,4 @@ class AdminController
 
         return $twig->render($response, 'create_category.twig', $params);
     }
-
 }

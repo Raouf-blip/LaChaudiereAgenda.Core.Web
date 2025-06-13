@@ -42,6 +42,7 @@ class ComposerStaticInit1dd8317b4a6ea4ee94bcd56af90c0152
             'Symfony\\Component\\Translation\\' => 30,
             'Slim\\Views\\' => 11,
             'Slim\\Psr7\\' => 10,
+            'Slim\\Csrf\\' => 10,
             'Slim\\' => 5,
         ),
         'P' => 
@@ -127,6 +128,10 @@ class ComposerStaticInit1dd8317b4a6ea4ee94bcd56af90c0152
         'Slim\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/slim/psr7/src',
+        ),
+        'Slim\\Csrf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/slim/csrf/src',
         ),
         'Slim\\' => 
         array (
