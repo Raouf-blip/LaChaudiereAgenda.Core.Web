@@ -2,11 +2,11 @@ SET NAMES utf8mb4;
 SET CHARACTER SET utf8mb4;
 
 -- Ajout de catégories
-INSERT INTO categories (name) VALUES
-('concert'),
-('spectacle'),
-('exposition'),
-('conférence');
+INSERT INTO categories (name, description) VALUES
+('concert', 'Événements musicaux'),
+('spectacle', 'Représentations théâtrales'),
+('exposition', 'Expositions artistiques'),
+('conférence', 'Conférences et débats');
 
 -- Ajout d’utilisateurs
 INSERT INTO users (id, email, password_hash, role) VALUES

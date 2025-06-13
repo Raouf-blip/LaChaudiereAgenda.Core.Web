@@ -76,4 +76,29 @@ class AdminController
         return $filename;
     }
 
+    public function createCategory(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        $twig = \Slim\Views\Twig::fromRequest($request);
+        $params = [];
+
+        if ($request->getMethod() === 'POST') {
+            $data = $request->getParsedBody();
+            $name = trim($data['name'] ?? '');
+            $description = trim($data['description'] ?? '');
+
+            if ($name === '' || $description === '') {
+                $params['error'] = 'Veuillez remplir tous les champs.';
+                $params['old'] = $data;
+            } else {
+                \Chaudiere\core\domain\entities\Categories::create([
+                    'name' => $name,
+                    'description' => $description
+                ]);
+                $params['success'] = true;
+            }
+        }
+
+        return $twig->render($response, 'create_category.twig', $params);
+    }
+
 }
