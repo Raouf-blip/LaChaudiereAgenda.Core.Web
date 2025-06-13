@@ -12,7 +12,7 @@ class Images extends Model {
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $fillable = ['id', 'name'];
+    protected $fillable = ['id', 'name', 'url'];
 
     public function events() {
         return $this->hasMany(Events::class, 'image_id', 'id');

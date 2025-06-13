@@ -20,15 +20,32 @@ class SignupAction
     public function __construct()
     {
         $userRepository = new UserRepository();
-
         $this->authProvider = new SessionAuthProvider($userRepository);
-
         $this->authnService = new AuthnService($userRepository, $this->authProvider);
     }
 
     public function __invoke(Request $request, Response $response, array $args): Response
     {
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+        $view = Twig::fromRequest($request);
+
+        // Récupération des jetons CSRF
+        $csrfNameKey = 'csrf_name';
+        $csrfValueKey = 'csrf_value';
+        $csrfName = $request->getAttribute($csrfNameKey);
+        $csrfValue = $request->getAttribute($csrfValueKey);
+
+        // Préparer les paramètres pour Twig, toujours inclure CSRF
+        $viewData = [
+            'csrf' => [
+                'keys' => [
+                    'name' => $csrfNameKey,
+                    'value' => $csrfValueKey
+                ],
+                'name' => $csrfName,
+                'value' => $csrfValue
+            ]
+        ];
 
         if ($this->authProvider->isAuthenticated()) {
             $url = $routeParser->urlFor('home');
@@ -43,18 +60,17 @@ class SignupAction
 
             // Basic validation
             if (empty($email) || empty($password) || empty($confirmPassword)) {
-                $view = Twig::fromRequest($request);
-                return $view->render($response, 'signup.twig', ['error' => 'Tous les champs sont obligatoires.']);
+                $viewData['error'] = 'Tous les champs sont obligatoires.';
+                return $view->render($response, 'signup.twig', $viewData);
             }
 
             if ($password !== $confirmPassword) {
-                $view = Twig::fromRequest($request);
-                return $view->render($response, 'signup.twig', ['error' => 'Les mots de passe ne correspondent pas.']);
+                $viewData['error'] = 'Les mots de passe ne correspondent pas.';
+                return $view->render($response, 'signup.twig', $viewData);
             }
 
             try {
                 $this->authnService->register($email, $password);
-
                 $user = $this->authnService->verifyCredentials($email, $password);
 
                 if ($user) {
@@ -66,13 +82,12 @@ class SignupAction
                 }
 
             } catch (\Exception $e) {
-
-                $view = Twig::fromRequest($request);
-                return $view->render($response, 'signup.twig', ['error' => $e->getMessage()]);
+                $viewData['error'] = $e->getMessage();
+                return $view->render($response, 'signup.twig', $viewData);
             }
         }
 
-        $view = Twig::fromRequest($request);
-        return $view->render($response, 'signup.twig');
+        // GET - Affichage du formulaire
+        return $view->render($response, 'signup.twig', $viewData);
     }
 }

@@ -17,6 +17,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
+use Slim\Csrf\Guard;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -51,7 +52,8 @@ $container->set(AuthnService::class, function ($c) {
 // Création de l'app
 $app = AppFactory::create();
 
-
+$csrf = new Guard($app->getResponseFactory());
+$app->add($csrf);
 
 // Configuration de Twig
 $twig = Twig::create(__DIR__ . '/../src/templates', ['cache' => false]);

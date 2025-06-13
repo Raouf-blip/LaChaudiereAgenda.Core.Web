@@ -222,6 +222,10 @@ Ce bloc sera inséré dans la section <head> de la page HTML.
         {% endif %}
 
         <form method="POST" action="/signin">
+
+            <input type="hidden" name="{{ csrf.keys.name }}" value="{{ csrf.name }}">
+            <input type="hidden" name="{{ csrf.keys.value }}" value="{{ csrf.value }}">
+
             <div class="form-group">
                 <label for="email">Email :</label>
                 <input type="email" id="email" name="email" required>

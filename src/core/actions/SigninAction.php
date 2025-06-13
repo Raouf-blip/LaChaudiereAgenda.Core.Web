@@ -27,6 +27,20 @@ class SigninAction
         $view = Twig::fromRequest($request);
         $viewData = [];
 
+        // Récupération des jetons CSRF à chaque affichage du formulaire
+        $csrfNameKey = 'csrf_name';
+        $csrfValueKey = 'csrf_value';
+        $csrfName = $request->getAttribute($csrfNameKey);
+        $csrfValue = $request->getAttribute($csrfValueKey);
+        $viewData['csrf'] = [
+            'keys' => [
+                'name' => $csrfNameKey,
+                'value' => $csrfValueKey
+            ],
+            'name' => $csrfName,
+            'value' => $csrfValue
+        ];
+
         // Vérifier si l'utilisateur est déjà connecté
         if ($this->authProvider->isAuthenticated()) {
             $_SESSION['flash_message'] = 'Vous êtes déjà connecté.';
@@ -42,11 +56,9 @@ class SigninAction
             $password = $params['password'] ?? '';
 
             try {
-
                 $user = $this->authnService->verifyCredentials($email, $password);
 
                 if ($user) {
-
                     $this->authProvider->login($user);
 
                     $_SESSION['flash_message'] = 'Connexion réussie ! Bienvenue.';
@@ -54,7 +66,6 @@ class SigninAction
 
                     $url = $routeParser->urlFor('home');
                     return $response->withHeader('Location', $url)->withStatus(302);
-
                 } else {
                     $_SESSION['flash_message'] = 'Email ou mot de passe invalide.';
                     $_SESSION['flash_message_type'] = 'error';
