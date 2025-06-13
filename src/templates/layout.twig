@@ -40,13 +40,16 @@
                             <a href="/admin/create/user" class="dropdown-item">
                                 <i class="fas fa-user-plus"></i> Créer un admin
                             </a>
-                            <a href="/admin/event" class="dropdown-item">
+                        {% endif %}
+                            <a href="/admin/events" class="dropdown-item">
                                 <i class="fas fa-calendar"></i> Consulter les événements
                             </a>
                             <a href="/admin/create/event" class="dropdown-item">
                                 <i class="fas fa-plus"></i> Créer un événement
                             </a>
-                        {% endif %}
+                            <a href="/admin/create/category" class="dropdown-item">
+                                <i class="fas fa-plus"></i> Créer une catégorie
+                            </a>
                         <a href="/signout" class="dropdown-item logout-btn">
                             <i class="fas fa-sign-out-alt"></i> Déconnexion
                         </a>

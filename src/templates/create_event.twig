@@ -1,17 +1,25 @@
 {% extends 'layout.twig' %}
 
 {% block content %}
-<h2>Créer un événement</h2>
 
-{% if success %}
-    <p style="color: green;">Événement ajouté avec succès !</p>
-{% endif %}
+    {% if flash_message %}
+        <div class="flash-message-container flash-{{ flash_message_type | default('info') }}">
+            {{ flash_message | raw }}
+        </div>
+    {% endif %}
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/css/eventForm.css">
+    </head>
 
 <form method="POST" enctype="multipart/form-data">
     {# Protection CSRF #}
     <input type="hidden" name="{{ csrf.keys.name }}" value="{{ csrf.name }}">
     <input type="hidden" name="{{ csrf.keys.value }}" value="{{ csrf.value }}">
 
+    <h2>Créer un événement</h2>
 
     <label>
         Titre :

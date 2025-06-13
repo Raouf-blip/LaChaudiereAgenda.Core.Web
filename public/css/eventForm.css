@@ -1,0 +1,255 @@
+main {
+    display: grid;
+    grid-template-columns: 100% 0;
+}
+
+/* --- Formulaires Généraux (y compris "Créer un événement") --- */
+.form-container,
+form { /* Applique ces styles à la balise <form> elle-même */
+    background-color: var(--surface-color);
+    padding: 40px; /* Plus de padding pour une meilleure ergonomie */
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+    max-width: 700px; /* Limite la largeur du formulaire */
+    margin: 40px auto; /* Centre le formulaire */
+    display: flex;
+    flex-direction: column;
+    animation: fadeInUp 0.7s ease-out 0.2s both;
+}
+
+form h2 {
+    color: var(--text-primary);
+    font-size: 2em;
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+form h2::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 60px;
+    height: 3px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+}
+
+/* Styles pour les labels et les champs de saisie */
+form label {
+    display: flex; /* Utilise flexbox pour aligner label et input */
+    flex-direction: column; /* Empile label et input verticalement */
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95em;
+    gap: 8px; /* Espacement entre le texte du label et l'input */
+}
+
+form input[type="text"],
+form input[type="date"],
+form input[type="time"],
+form input[type="number"],
+form select,
+form textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-small);
+    background-color: var(--surface-hover); /* Une couleur un peu plus sombre pour les champs */
+    color: var(--text-primary);
+    font-size: 1em;
+    transition: var(--transition);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2); /* Ombre interne subtile */
+    -webkit-appearance: none; /* Supprime les styles par défaut pour les selects et dates */
+    -moz-appearance: none;
+    appearance: none;
+}
+
+form input[type="text"]:focus,
+form input[type="date"]:focus,
+form input[type="time"]:focus,
+form input[type="number"]:focus,
+form select:focus,
+form textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    background-color: var(--surface-color); /* Plus clair au focus */
+    box-shadow: var(--glow); /* Effet de lueur au focus */
+}
+
+form textarea {
+    resize: vertical; /* Permet uniquement le redimensionnement vertical */
+    min-height: 100px;
+}
+
+/* Style spécifique pour le champ select (avec flèche personnalisée si besoin) */
+form select {
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20512%22%3E%3Cpath%20fill%3D%22%23a5b4fc%22%20d%3D%22M192%20256l-64%2064-64-64z%22%2F%3E%3C%2Fsvg%3E'); /* Custom arrow */
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 14px;
+    padding-right: 40px; /* Espace pour la flèche */
+}
+
+/* Styles pour le champ de type fichier (input type="file") */
+form input[type="file"] {
+    border: 2px dashed var(--border-color); /* Bordure en pointillés */
+    background-color: var(--surface-hover);
+    padding: 18px; /* Plus de padding pour la zone de dépôt */
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    text-align: center;
+}
+
+form input[type="file"]::-webkit-file-upload-button {
+    visibility: hidden; /* Masque le bouton par défaut */
+}
+
+form input[type="file"]::before {
+    content: 'Choisir une image'; /* Texte personnalisé */
+    display: inline-block;
+    background: var(--gradient-primary); /* Style de bouton */
+    color: var(--text-primary);
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+}
+
+form input[type="file"]:hover::before {
+    transform: translateY(-2px);
+    box-shadow: var(--glow);
+}
+
+form input[type="file"]:active::before {
+    transform: translateY(0);
+}
+
+/* Styles pour la case à cocher (checkbox) */
+form input[type="checkbox"] {
+    /* Cache l'input par défaut pour le styliser avec un pseudo-élément */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--surface-hover);
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-block; /* Pour qu'il prenne de la place */
+    vertical-align: middle; /* Alignement vertical */
+    margin-right: 8px; /* Espacement avec le label */
+    position: relative;
+    top: -2px; /* Ajustement fin */
+}
+
+form input[type="checkbox"]:checked {
+    background: var(--gradient-primary);
+    border-color: var(--primary-color);
+}
+
+form input[type="checkbox"]:checked::after {
+    content: '\2713'; /* Symbole de coche (✓) */
+    color: var(--text-primary);
+    font-size: 16px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+form input[type="checkbox"]:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Conteneur spécifique pour la checkbox et son label */
+form label input[type="checkbox"] + span { /* Si le texte "Publié" est dans un span */
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Bouton de soumission */
+form button[type="submit"] {
+    /* Réutilise les styles de bouton déjà définis dans ton CSS principal */
+    align-self: flex-start; /* Alignement à gauche */
+    margin-top: 20px; /* Espace au-dessus du bouton */
+}
+
+/* Message de succès */
+.admin-container p[style="color: green;"],
+form + p[style="color: green;"] { /* Au cas où il serait directement après le form */
+    background-color: rgba(16, 185, 129, 0.15); /* Vert avec transparence */
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+}
+
+/* Gestion des erreurs (si tu ajoutes des messages d'erreur plus tard) */
+.error-message {
+    color: var(--danger-color);
+    font-size: 0.85em;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    padding-left: 5px;
+    border-left: 3px solid var(--danger-color);
+}
+
+form input.is-invalid,
+form textarea.is-invalid,
+form select.is-invalid {
+    border-color: var(--danger-color) !important;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+/* Media Queries pour la réactivité */
+@media (max-width: 600px) {
+    .form-container,
+    form {
+        padding: 20px;
+        margin: 20px auto;
+        gap: 15px;
+    }
+
+    form h2 {
+        font-size: 1.8em;
+    }
+
+    form input[type="text"],
+    form input[type="date"],
+    form input[type="time"],
+    form input[type="number"],
+    form select,
+    form textarea {
+        padding: 12px 15px;
+        font-size: 0.95em;
+    }
+
+    form input[type="file"]::before {
+        padding: 8px 15px;
+        font-size: 0.85em;
+    }
+
+    form button[type="submit"] {
+        width: 100%; /* Le bouton prend toute la largeur sur mobile */
+    }
+}

@@ -107,6 +107,15 @@ class AuthnService implements AuthnServiceInterface
         return $currentUser !== null && $currentUser->isSuperAdmin();
     }
 
+    /**
+     * Vérifie si l'utilisateur actuel est un admin
+     */
+    public function canCreate(): bool
+    {
+        $currentUser = $this->getCurrentUser();
+        return $currentUser !== null && $currentUser->isAdmin();
+    }
+
     public function verifyCredentials(string $email, string $password): ?User
     {
         // Validation basique

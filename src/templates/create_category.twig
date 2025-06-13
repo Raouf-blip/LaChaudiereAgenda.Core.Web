@@ -1,7 +1,14 @@
 {% extends 'layout.twig' %}
 
 {% block content %}
-<h2>Créer une catégorie</h2>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/css/categoryForm.css">
+    </head>
+
+
 
 {% if error %}
     <p style="color: red;">{{ error|e }}</p>
@@ -15,6 +22,8 @@
     {# Protection CSRF #}
     <input type="hidden" name="{{ csrf.keys.name }}" value="{{ csrf.name }}">
     <input type="hidden" name="{{ csrf.keys.value }}" value="{{ csrf.value }}">
+
+    <h2>Créer une catégorie</h2>
 
     <label for="name">Libellé :</label><br>
     <input type="text" id="name" name="name" value="{{ old.name|default('')|e }}" required><br><br>

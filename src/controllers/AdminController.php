@@ -2,6 +2,8 @@
 
 namespace Chaudiere\controllers;
 
+use Chaudiere\core\UseCase\AuthnService;
+use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -12,6 +14,13 @@ use Slim\Psr7\UploadedFile;
 
 class AdminController
 {
+    private AuthnService $authnService;
+
+    public function __construct(AuthnService $authnService)
+    {
+        $this->authnService = $authnService;
+    }
+
     public function createEvent(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $twig = Twig::fromRequest($request);
@@ -32,6 +41,16 @@ class AdminController
             'name' => $csrfName,
             'value' => $csrfValue
         ];
+
+        if (!$this->authnService->isSignedIn() || !($this->authnService->canCreate() || $this->authnService->canManageUsers())) {
+
+            $_SESSION['flash_message'] = 'Vous n\'avez pas les droits suffisants pour accéder à cette page.';
+            $_SESSION['flash_message_type'] = 'error';
+
+            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+            $url = $routeParser->urlFor('home');
+            return $response->withHeader('Location', $url)->withStatus(302);
+        }
 
         if ($request->getMethod() === 'POST') {
             $data = $request->getParsedBody();
@@ -115,6 +134,16 @@ class AdminController
             'value' => $csrfValue
         ];
 
+        if (!$this->authnService->isSignedIn() || !($this->authnService->canCreate() || $this->authnService->canManageUsers())) {
+
+            $_SESSION['flash_message'] = 'Vous n\'avez pas les droits suffisants pour accéder à cette page.';
+            $_SESSION['flash_message_type'] = 'error';
+
+            $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+            $url = $routeParser->urlFor('home');
+            return $response->withHeader('Location', $url)->withStatus(302);
+        }
+
         if ($request->getMethod() === 'POST') {
             $data = $request->getParsedBody();
             $name = trim($data['name'] ?? '');
@@ -129,6 +158,8 @@ class AdminController
                     'description' => $description
                 ]);
                 $params['success'] = true;
+                $_SESSION['flash_message'] = "L'evénement à été crée avec succès!";
+                $_SESSION['flash_message_type'] = 'success';
             }
         }
 

@@ -6,6 +6,7 @@
     <title>Événements à Venir</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 
@@ -22,11 +23,8 @@
 
             <div id="adminDiv"></div>
 
-            <a href="/signin" class="nav-item auth-btn signin-btn">
-                <i class="fas fa-sign-in-alt"></i> Connexion
-            </a>
-            <a href="/signup" class="nav-item auth-btn signup-btn">
-                <i class="fas fa-user-plus"></i> Inscription
+            <a href="/signout" class="nav-item auth-btn signin-btn">
+                <i class="fa fa-sign-out"></i> Déconnexion
             </a>
         </nav>
     </div>
@@ -170,7 +168,7 @@
         const container = document.getElementById('adminDiv');
 
         if (parseInt(role) === 1 || parseInt(role) === 50) {
-            container.innerHTML = '<a href="/admin/create/user" class="nav-item"><i class="fas fa-tools"></i> Administration</a>';
+            container.innerHTML = '<a href="/admin/events" class="nav-item"><i class="fas fa-tools"></i> Administration</a>';
         }
     } catch (e) {
         console.error('Erreur de récupération du rôle :', e);
