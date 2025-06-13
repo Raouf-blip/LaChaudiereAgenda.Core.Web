@@ -4,6 +4,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Chaudiere\core\domain\entities\Events;
 use Chaudiere\core\domain\entities\Categories;
+use Chaudiere\core\domain\entities\Images;
 use Slim\Views\Twig;
 
 return function($app) {
@@ -114,21 +115,20 @@ return function($app) {
     });
 
     // liste des images
-    $app->get('/images/{id}', function ($request, $response, $args) {
+    $app->get('/api/images/{id}', function ($request, $response, $args) {
         $image = Images::find($args['id']);
+
         if (!$image) {
-            return $response->withStatus(404);
+            $response->getBody()->write(json_encode(['error' => 'Image not found']));
+            return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
         }
 
-        $path = __DIR__ . '/../public/img/' . $image->name;
-        if (!file_exists($path)) {
-            return $response->withStatus(404);
-        }
+        $response->getBody()->write(json_encode([
+            'id'   => $image->id,
+            'name' => $image->name,
+            'url'  => $image->url,
+        ]));
 
-        $stream = new \Slim\Psr7\Stream(fopen($path, 'rb'));
-        return $response
-            ->withHeader('Content-Type', mime_content_type($path))
-            ->withBody($stream);
+        return $response->withHeader('Content-Type', 'application/json');
     });
-
 };
