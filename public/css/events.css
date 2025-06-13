@@ -1,3 +1,8 @@
+main {
+    display: grid;
+    grid-template-columns: 0 100%; /* 280px pour l'aside, 1fr pour le contenu restant */
+}
+
 /* --- Admin Container Specific Styles (Building on existing base) --- */
 .admin-container {
     max-width: 1200px;
@@ -184,11 +189,7 @@
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2); /* Inset shadow */
 }
 
-/* --- Action Buttons (Placeholder for future use) --- */
-.event-table td:last-child {
-    text-align: center;
-    white-space: nowrap;
-}
+
 
 /* Re-using existing button styles but providing context for table actions */
 .event-table .btn {
@@ -217,113 +218,4 @@
     background-color: #c82333; /* Slightly darker red */
     transform: translateY(-1px);
     box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); /* Enhanced red shadow */
-}
-
-/* --- Responsive Adjustments --- */
-@media (max-width: 768px) {
-    .admin-container {
-        margin: 20px auto;
-        padding: 20px;
-    }
-
-    .admin-container h2 {
-        font-size: 1.8em;
-        margin-bottom: 20px;
-    }
-
-    .filter-sort-form {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 15px;
-    }
-
-    .form-group {
-        width: 100%;
-        min-width: unset; /* Remove min-width on small screens */
-    }
-
-    .form-group select {
-        padding: 10px 15px;
-        font-size: 0.9em;
-    }
-
-    /* Stack table cells for responsiveness */
-    .event-table, .event-table thead, .event-table tbody, .event-table th, .event-table td, .event-table tr {
-        display: block;
-    }
-
-    .event-table thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-    }
-
-    .event-table tr {
-        border: 1px solid var(--border-color); /* Keep the border for individual rows */
-        margin-bottom: 15px; /* More space between stacked rows */
-        border-radius: var(--border-radius-small);
-        overflow: hidden; /* Ensure rounded corners */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Shadow for each card-like row */
-    }
-
-    .event-table td {
-        border: none; /* Remove internal cell borders */
-        border-bottom: 1px solid var(--border-color); /* Only bottom border for stacked cells */
-        position: relative;
-        padding-left: 50%; /* Space for the pseudo-element label */
-        text-align: right;
-        font-size: 0.95em;
-    }
-
-    .event-table td:last-child {
-        border-bottom: none; /* No border on the very last cell */
-    }
-
-    .event-table td:before {
-        content: attr(data-label);
-        position: absolute;
-        left: 0;
-        width: 45%;
-        padding-left: 15px;
-        white-space: nowrap;
-        font-weight: 700; /* Bolder labels */
-        text-align: left;
-        color: var(--text-primary); /* Primary text color for labels */
-    }
-}
-
-/* Optional: Add a "Add New Event" button */
-.add-event-button-container {
-    text-align: right; /* Align button to the right */
-    margin-bottom: 20px; /* Space above table */
-}
-
-/* Apply existing 'button' styles to the link, or create a specific class */
-.add-event-button {
-    /* Reuse styles from your base CSS for buttons if applicable, e.g., 'button' class */
-    background: var(--gradient-accent); /* Use accent gradient for add button */
-    color: var(--text-primary);
-    border: none;
-    padding: 10px 20px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: var(--transition);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-    text-decoration: none; /* Important for links */
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.add-event-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.5), 0 8px 25px rgba(16, 185, 129, 0.3);
-}
-
-.add-event-button i { /* For a plus icon, if you use one */
-    font-size: 1.1em;
 }
