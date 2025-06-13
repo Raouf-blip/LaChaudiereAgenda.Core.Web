@@ -63,4 +63,68 @@ INSERT INTO events (
  '2025-06-18', '2025-06-18', '18:00:00', '20:00:00', 5.00,
  (SELECT id FROM images WHERE name = 'conference-climat.jpg'),
  (SELECT id FROM categories WHERE name = 'conférence'),
+ NULL),
+
+ -- Concert
+ (UUID(),
+ 'Festival de Musique du Monde',
+    'Orchestre Mondial',
+    'Un festival de musique du monde avec des artistes internationaux et locaux.',
+    '2025-08-10', '2025-08-12', '15:00:00', '23:00:00', 20.00,
+    (SELECT id FROM images WHERE name = 'concert-jazz.jpg'),
+    (SELECT id FROM categories WHERE name = 'concert'),
+    NULL),
+
+-- Spectacle
+(UUID(),
+ 'Improvisation Théâtrale',
+ 'La Compagnie Spontanée',
+ 'Un spectacle d’improvisation interactif avec participation du public.',
+ '2025-09-15', '2025-09-15', '20:00:00', '22:00:00', 10.00,
+ (SELECT id FROM images WHERE name = 'theatre-absurde.jpg'),
+ (SELECT id FROM categories WHERE name = 'spectacle'),
+ NULL),
+
+-- Exposition
+(UUID(),
+ 'Couleurs Urbaines',
+ 'Artistes de la Rue',
+ 'Une exposition de fresques, graffitis et photographies urbaines.',
+ '2025-07-01', '2025-07-31', NULL, NULL, 0.00,
+ (SELECT id FROM images WHERE name = 'expo-peinture.jpg'),
+ (SELECT id FROM categories WHERE name = 'exposition'),
+ NULL),
+
+-- Conférence
+(UUID(),
+ 'Vers une Économie Locale Résiliente',
+ 'Élodie Martin',
+ 'Une conférence participative sur les circuits courts et l’autonomie alimentaire.',
+ '2025-10-03', '2025-10-03', '19:00:00', '21:00:00', 3.00,
+ (SELECT id FROM images WHERE name = 'conference-climat.jpg'),
+ (SELECT id FROM categories WHERE name = 'conférence'),
+ NULL),
+
+-- Concert
+(UUID(),
+ 'Chants du Monde',
+ 'Voix Nomades',
+ 'Un voyage musical à travers les traditions vocales du monde entier.',
+ '2025-07-20', '2025-07-20', '21:00:00', '23:30:00', 15.00,
+ (SELECT id FROM images WHERE name = 'concert-jazz.jpg'),
+ (SELECT id FROM categories WHERE name = 'concert'),
+ NULL),
+
+-- Exposition
+(UUID(),
+ 'Fragments Végétaux',
+ 'Collectif Chlorophylle',
+ 'Installation artistique autour de la nature, des plantes et du vivant.',
+ '2025-08-05', '2025-08-30', NULL, NULL, 2.00,
+ (SELECT id FROM images WHERE name = 'expo-peinture.jpg'),
+ (SELECT id FROM categories WHERE name = 'exposition'),
  NULL);
+
+
+
+
