@@ -112,4 +112,23 @@ return function($app) {
 
         return jsonResponse($response, $events);
     });
+
+    // liste des images
+    $app->get('/images/{id}', function ($request, $response, $args) {
+        $image = Images::find($args['id']);
+        if (!$image) {
+            return $response->withStatus(404);
+        }
+
+        $path = __DIR__ . '/../public/img/' . $image->name;
+        if (!file_exists($path)) {
+            return $response->withStatus(404);
+        }
+
+        $stream = new \Slim\Psr7\Stream(fopen($path, 'rb'));
+        return $response
+            ->withHeader('Content-Type', mime_content_type($path))
+            ->withBody($stream);
+    });
+
 };

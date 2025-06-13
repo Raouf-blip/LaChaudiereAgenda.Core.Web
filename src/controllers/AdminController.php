@@ -49,9 +49,13 @@ class AdminController
 
                 $filename = $this->moveUploadedFile($uploadDirectory, $uploadedFile);
 
+                // Génère une URL accessible par l'app mobile
+                $publicUrl = $_ENV['APP_URL'] . '/img/' . $filename;
+
                 $image = Images::create([
-                    'id' => uniqid(),
-                    'name' => $filename
+                    'id'   => uniqid(),
+                    'name' => $filename,
+                    'url'  => $publicUrl
                 ]);
 
                 $imageId = $image->id;
@@ -78,6 +82,7 @@ class AdminController
         $params['categories'] = $categories;
         return $twig->render($response, 'create_event.twig', $params);
     }
+
 
     private function moveUploadedFile(string $directory, UploadedFile $uploadedFile): string
     {

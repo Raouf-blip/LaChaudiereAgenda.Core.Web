@@ -14,12 +14,12 @@ INSERT INTO users (id, email, password_hash, role) VALUES
 (UUID(), 'bob@lachaudiere.org', '$2a$12$jaRb1PEEhGSpCojdUdsSx.PgDMhQaLCL2ZKJhg5tJAT0uSGL3qB9m', 50),
 (UUID(), 'carole@lachaudiere.org', '$2a$12$q8R9yzAVJ6T.s3DwuN6MNe.9kaYfwvgHb6YjjlpIZYB5Q9aMlF9lq', 1);
 
--- Ajout d’images (avec vrais UUIDs)
-INSERT INTO images (id, name) VALUES
-(UUID(), 'concert-jazz.jpg'),
-(UUID(), 'theatre-absurde.jpg'),
-(UUID(), 'expo-peinture.jpg'),
-(UUID(), 'conference-climat.jpg');
+-- Ajout d'images
+INSERT INTO images (id, name, url) VALUES
+(UUID(), 'concert-jazz.jpg',      'http://localhost:10000/img/concert-jazz.jpg'),
+(UUID(), 'theatre-absurde.jpg',   'http://localhost:10000/img/theatre-absurde.jpg'),
+(UUID(), 'expo-peinture.jpg',     'http://localhost:10000/img/expo-peinture.jpg'),
+(UUID(), 'conference-climat.jpg', 'http://localhost:10000/img/conference-climat.jpg');
 
 -- Ajout d’événements
 INSERT INTO events (

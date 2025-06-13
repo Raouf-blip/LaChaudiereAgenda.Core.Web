@@ -22,7 +22,8 @@ CREATE TABLE categories (
 -- Table des images
 CREATE TABLE images (
     id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL,
+    url TEXT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Table des événements
