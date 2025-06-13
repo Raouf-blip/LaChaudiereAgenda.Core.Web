@@ -1,5 +1,7 @@
 <?php
 
+use Chaudiere\core\domain\repositories\UserRepository;
+use Chaudiere\core\providers\SessionAuthProvider;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Chaudiere\core\domain\entities\Events;

@@ -109,8 +109,6 @@ $app->get('/signup', SignupAction::class)->setName('signup');
 $app->post('/signup', SignupAction::class)->setName('signup_post');
 
 // Route for Create Admin User
-$app->get('/create-admin', GetCreateAdminUserAction::class)->setName('create_admin');
-$app->post('/create-admin', GetCreateAdminUserAction::class)->setName('create_admin_post');
 $app->get('/admin/create/user', GetCreateAdminUserAction::class)->setName('create_admin');
 $app->post('/admin/create/user', GetCreateAdminUserAction::class)->setName('create_admin_post');
 
