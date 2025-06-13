@@ -34,7 +34,7 @@ services:
 
       if [ ! -f /sql/.done ]; then
         echo '🚀 Initialisation de la base de données...';
-        mysql -h mysql-db -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /sql/schema.sql && \
+        mysql -h mysql-db -u root -p${MYSQL_ROOT_PASSWORD} < /sql/schema.sql && \
         mysql -h mysql-db -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /sql/data.sql && \
         touch /sql/.done && \
         echo '✅ Base de données initialisée.';
