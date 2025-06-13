@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace Chaudiere\core\actions;
 
-use Chaudiere\core\domain\repositories\UserRepository;
 use Chaudiere\core\providers\SessionAuthProvider;
-use Chaudiere\core\UseCase\AuthnService;
 use Chaudiere\core\UseCase\AuthnServiceInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -44,15 +42,12 @@ class SigninAction
             $password = $params['password'] ?? '';
 
             try {
-                // Vérifier les identifiants
+
                 $user = $this->authnService->verifyCredentials($email, $password);
 
                 if ($user) {
-                    // ✨ CORRECTION IMPORTANTE : Connecter explicitement l'utilisateur
-                    $this->authProvider->login($user);
 
-                    // Alternativement, si votre AuthnService a une méthode pour ça :
-                    // $this->authnService->login($user);
+                    $this->authProvider->login($user);
 
                     $_SESSION['flash_message'] = 'Connexion réussie ! Bienvenue.';
                     $_SESSION['flash_message_type'] = 'success';

@@ -21,8 +21,7 @@ class SignupAction
     {
         $userRepository = new UserRepository();
 
-        // Pass the userRepository to SessionAuthProvider constructor
-        $this->authProvider = new SessionAuthProvider($userRepository); // Initialise authProvider ici
+        $this->authProvider = new SessionAuthProvider($userRepository);
 
         $this->authnService = new AuthnService($userRepository, $this->authProvider);
     }

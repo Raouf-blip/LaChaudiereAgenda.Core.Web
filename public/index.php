@@ -85,10 +85,7 @@ $app->add(function ($request, $handler) {
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 });
 
-// ✨ AJOUT DU MIDDLEWARE D'AUTHENTIFICATION
 $app->add(new AuthMiddleware($authProvider, [
-    // Vous pouvez ajouter d'autres routes publiques ici si nécessaire
-    // 'home', // par exemple si vous voulez que la page d'accueil soit publique
 ]));
 
 // Middleware
@@ -114,6 +111,8 @@ $app->post('/signup', SignupAction::class)->setName('signup_post');
 // Route for Create Admin User
 $app->get('/create-admin', GetCreateAdminUserAction::class)->setName('create_admin');
 $app->post('/create-admin', GetCreateAdminUserAction::class)->setName('create_admin_post');
+$app->get('/admin/create/user', GetCreateAdminUserAction::class)->setName('create_admin');
+$app->post('/admin/create/user', GetCreateAdminUserAction::class)->setName('create_admin_post');
 
 require __DIR__ . '/../src/config/routes/api.php';
 
@@ -121,9 +120,8 @@ $app->options('/{routes:.+}', function ($request, $response) {
     return $response;
 });
 
-$app->get('/events', function (Request $request, Response $response) use ($authProvider) {
-    $view = Twig::fromRequest($request);
-    return $view->render($response, 'index.twig');
+$app->get('/', function (Request $request, Response $response) {
+    return $response->withHeader('Location', 'index.html')->withStatus(302);
 })->setName('home');
 
 

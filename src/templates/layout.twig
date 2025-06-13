@@ -18,14 +18,9 @@
             <h1 class="brand-title">LaChaudièreAgenda</h1>
         </a>
         <nav class="main-nav">
-            {# Navigation links #}
             <a href="/" class="nav-item">
                 <i class="fas fa-home"></i> Accueil
             </a>
-            <a href="/events" class="nav-item">
-                <i class="fas fa-calendar-alt"></i> Événements
-            </a>
-            {# Other navigation links, e.g., authentication #}
             {% if auth.isAuthenticated() %}
                 <div class="nav-dropdown">
                     <a href="#" class="nav-item dropdown-trigger">
@@ -34,7 +29,7 @@
                     </a>
                     <div class="dropdown-menu">
                         {% if auth.canManageUsers() %}
-                            <a href="/create-admin" class="dropdown-item">
+                            <a href="/admin/create/user" class="dropdown-item">
                                 <i class="fas fa-user-plus"></i> Créer un admin
                             </a>
                         {% endif %}
@@ -64,7 +59,6 @@
     {% endif %}
     {# ------------------------------------ #}
 
-    {# This block is where the content from child templates will be injected #}
     {% block content %}{% endblock %}
 </main>
 
@@ -86,7 +80,6 @@
     </div>
 </footer>
 
-{# This block allows child templates to add extra JavaScript #}
 {% block javascripts %}
     <script>
         // Script pour la gestion des messages flash
@@ -121,8 +114,7 @@
             }
         });
     </script>
-    {# Inclure Font Awesome pour les icônes #}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="js/app.js" type="module"></script>
 {% endblock %}
 </body>

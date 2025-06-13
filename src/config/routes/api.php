@@ -8,11 +8,6 @@ use Slim\Views\Twig;
 
 return function($app) {
 
-    $app->get('/', function (Request $request, Response $response) {
-        $view = Twig::fromRequest($request);
-        return $view->render($response, 'index.twig');
-    });
-
 // gerer les réponses JSON
     function jsonResponse(Response $response, $data, int $status = 200): Response {
         $response->getBody()->write(json_encode($data));
@@ -111,5 +106,15 @@ return function($app) {
             });
 
         return jsonResponse($response, $events);
+    });
+
+    $app->get('/api/role', function (Request $request, Response $response) {
+        $userRepo = new UserRepository();
+        $auth = new SessionAuthProvider($userRepo); // ✅ correction ici
+
+        $role = $auth->getUserRole() ?? 0;
+
+        $response->getBody()->write((string)$role);
+        return $response->withHeader('Content-Type', 'text/plain');
     });
 };

@@ -26,7 +26,6 @@ class SignoutAction
         $_SESSION['flash_message'] = 'Vous avez été déconnecté avec succès.';
         $_SESSION['flash_message_type'] = 'success';
 
-        // Redirection vers la page de connexion
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
         $url = $routeParser->urlFor('signin');
 

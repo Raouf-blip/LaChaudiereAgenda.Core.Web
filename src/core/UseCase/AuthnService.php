@@ -44,27 +44,6 @@ class AuthnService implements AuthnServiceInterface
         return $user;
     }
 
-    public function registerUser(string $userId, string $password): User
-    {
-        $this->validatePassword($password);
-
-        $existingUser = $this->userRepository->findByUserId($userId);
-        if ($existingUser !== null) {
-            throw new \RuntimeException("Un utilisateur avec cet ID utilisateur existe déjà");
-        }
-
-        $hashedPassword = $this->hashPassword($password);
-
-        $user = new User();
-        $user->id = base64_encode(random_bytes(16));
-        $user->email = $userId;
-        $user->password_hash = $hashedPassword;
-        $user->role = self::ROLE_USER;
-
-        $this->userRepository->save($user);
-        return $user;
-    }
-
     /**
      * Fonctionnalité 13: Création d'utilisateurs par le super-admin
      * Seul un super-admin peut créer de nouveaux administrateurs

@@ -11,7 +11,6 @@ class SessionAuthProvider implements AuthProviderInterface
 {
     private UserRepositoryInterface $userRepository;
 
-    // ✨ Utiliser une seule clé de session pour tout
     private const SESSION_USER_ID_KEY = 'user_id';
     private const SESSION_LAST_ACTIVITY_KEY = 'auth_last_activity';
     private const SESSION_AUTHENTICATED_KEY = 'authenticated';
@@ -107,7 +106,7 @@ class SessionAuthProvider implements AuthProviderInterface
         // Régénérer l'ID de session pour la sécurité
         session_regenerate_id(true);
 
-        // ✨ Utiliser les mêmes clés partout
+
         $_SESSION[self::SESSION_USER_ID_KEY] = $userId;
         $_SESSION[self::SESSION_AUTHENTICATED_KEY] = true;
         $_SESSION[self::SESSION_LOGIN_TIME_KEY] = time();
@@ -191,9 +190,6 @@ class SessionAuthProvider implements AuthProviderInterface
         unset($_SESSION[self::SESSION_AUTHENTICATED_KEY]);
         unset($_SESSION[self::SESSION_LOGIN_TIME_KEY]);
         unset($_SESSION['auth_user_role']);
-
-        // Optionnel : détruire complètement la session
-        // session_destroy();
     }
 
     /**

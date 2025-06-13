@@ -24,8 +24,6 @@ class AuthMiddleware implements MiddlewareInterface
             'signup',
             'signup_post',
             'signout',
-            'create_admin',
-            'create_admin_post'
         ], $publicRoutes);
     }
 
