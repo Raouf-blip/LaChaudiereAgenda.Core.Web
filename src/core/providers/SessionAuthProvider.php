@@ -45,6 +45,11 @@ class SessionAuthProvider implements AuthProviderInterface
         return $_SESSION[self::SESSION_USER_ID_KEY] ?? null;
     }
 
+    public function canManageUsers(): bool
+    {
+        $user = $this->getSignedInUser();
+        return $user !== null && $user->isSuperAdmin();
+    }
 
     /**
      * {@inheritDoc}

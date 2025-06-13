@@ -60,6 +60,14 @@ $container->set(GetCreateAdminUserAction::class, function ($c) {
     return new GetCreateAdminUserAction($c->get(AuthnService::class));
 });
 
+$container->set(SigninAction::class, function ($c) {
+    // Correctly inject dependencies from the container
+    return new SigninAction(
+        $c->get(AuthnService::class),
+        $c->get(SessionAuthProvider::class)
+    );
+});
+
 $twig->getEnvironment()->addGlobal('auth', $authProvider);
 
 
@@ -102,11 +110,10 @@ $app->options('/{routes:.+}', function ($request, $response) {
 });
 
 $app->get('/events', function (Request $request, Response $response) use ($authProvider) {
-    if (!$authProvider->isAuthenticated()) {
-        return $response->withHeader('Location', '/signin')->withStatus(302);
-    }
     $view = Twig::fromRequest($request);
     return $view->render($response, 'index.twig');
 })->setName('home');
+
+
 
 $app->run();

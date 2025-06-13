@@ -5,7 +5,9 @@
     "illuminate/database": "^10.0",
     "vlucas/phpdotenv": "^5.5",
     "slim/twig-view": "^3.0",
-    "twig/twig": "^3.21"
+    "twig/twig": "^3.21",
+    "php-di/php-di": "^7.0",
+    "ramsey/uuid": "^4.8"
   },
   "autoload": {
     "psr-4": {

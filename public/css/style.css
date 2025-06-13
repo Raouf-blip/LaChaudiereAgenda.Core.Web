@@ -87,7 +87,7 @@ body::before {
   border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
-  z-index: 10000;
+  z-index: 1000;
   backdrop-filter: blur(20px);
   box-shadow: var(--shadow-lg);
   animation: fadeInUp 0.6s ease-out;
@@ -829,13 +829,18 @@ select:focus {
 .main-footer {
   background: var(--surface-color);
   color: var(--text-primary);
-  padding: 2rem 0;
+  padding: 3rem 0;
   border-top: 1px solid var(--border-color);
   backdrop-filter: blur(20px);
   animation: fadeInUp 1s ease-out 0.4s both;
+  margin-bottom: 0;
   max-height: var(--footer-height); /* Utilise la variable de hauteur */
   display: flex; /* Active flexbox pour aligner le contenu */
   align-items: center; /* Centre verticalement */
+}
+
+.main-footer p {
+  color: var(--text-secondary);
 }
 
 .footer-container {
@@ -961,160 +966,6 @@ select:focus {
   border-color: var(--danger-color);
 }
 
-/* --- Responsive Design --- */
-@media (max-width: 1024px) {
-  .header-container {
-    padding: 0 1.5rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .brand-title {
-    font-size: 1.5rem;
-  }
-
-  /* Main passe en colonne sur les petits écrans */
-  main {
-    grid-template-columns: 1fr; /* Une seule colonne */
-    margin: 1rem; /* Marge générale autour du main sur mobile */
-    padding: 0; /* Padding interne à 0, géré par aside/content */
-    min-height: calc(100vh - var(--header-height) - var(--footer-height) - 2rem); /* 2rem pour les marges top/bottom de main */
-  }
-
-  aside {
-    position: static; /* Retire le sticky */
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
-    margin-left: 0; /* Retire la marge négative sur mobile */
-    padding-left: 24px; /* Rétablit le padding normal de l'aside */
-    height: auto; /* Permet à l'aside de s'adapter à son contenu */
-  }
-
-  .content {
-    margin-right: 0; /* Retire la marge négative sur mobile */
-    padding: 24px; /* Rétablit le padding normal du content */
-  }
-
-  section {
-    margin-bottom: 24px; /* Ajuste l'espacement des sections */
-  }
-}
-
-@media (max-width: 768px) {
-  .header-container {
-    padding: 0 1rem;
-    flex-direction: column;
-    min-height: auto;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    align-items: flex-start; /* Aligne les éléments du header à gauche */
-  }
-
-  .main-nav {
-    order: 3; /* Déplace la navigation en bas dans l'ordre flex */
-    width: 100%;
-    flex-direction: column;
-    background: var(--surface-color);
-    border-radius: var(--border-radius);
-    padding: 1rem;
-    margin-top: 1rem;
-    border: 1px solid var(--border-color);
-    display: none; /* Caché par défaut en mobile, géré par JS */
-  }
-
-  .main-nav.mobile-active {
-    display: flex; /* Affiché quand la classe est active par JS */
-    animation: slideDown 0.3s ease-out;
-  }
-
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .nav-item {
-    width: 100%;
-    justify-content: flex-start;
-    padding: 1rem 1.25rem;
-    margin: 0.25rem 0;
-  }
-
-  .user-menu { /* Si tu as un menu utilisateur séparé du dropdown */
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 1rem;
-    width: 100%;
-  }
-
-  .brand {
-    width: 100%; /* S'assure que le brand prend toute la largeur */
-    justify-content: center; /* Centre le logo/titre */
-    margin-bottom: 1rem; /* Espacement avant le toggle */
-  }
-
-  .brand-title {
-    font-size: 1.75rem; /* Ajuste la taille du titre du brand */
-  }
-
-  .mobile-menu-toggle {
-    display: flex; /* Affiche le bouton hamburger */
-    order: 2; /* Positionne le toggle après le brand et avant la nav */
-    position: absolute; /* Permet de le positionner précisément */
-    top: 1rem;
-    right: 1rem;
-  }
-
-  section {
-    padding: 20px 0; /* Ajuste le padding des sections sur petits mobiles */
-  }
-
-  #events-list li,
-  #favorites-list li {
-    flex-direction: column; /* Empile les éléments de liste */
-    align-items: center;
-    text-align: center;
-  }
-
-  #events-list img,
-  #favorites-list img {
-    width: 100%; /* L'image prend toute la largeur */
-    max-width: 200px; /* Limite la taille de l'image */
-    height: auto; /* Hauteur automatique pour l'aspect ratio */
-    margin-bottom: 12px;
-  }
-
-  .event-info {
-    align-items: center; /* Centre le texte */
-  }
-
-  .event-detail-content {
-    grid-template-columns: 1fr; /* Les détails d'événement passent en colonne */
-  }
-
-  .event-detail-image {
-    max-width: 100%;
-    height: auto;
-  }
-
-  .event-detail-title {
-    font-size: 2rem;
-  }
-
-  .event-detail-artist {
-    font-size: 1.2rem;
-  }
-
-  .event-detail-info-grid {
-    grid-template-columns: 1fr; /* Une seule colonne pour les infos */
-  }
-}
 
 /* --- Accessibilité et Performances --- */
 .nav-item:focus,

@@ -29,7 +29,7 @@
             {% if auth.isAuthenticated() %}
                 <div class="nav-dropdown">
                     <a href="#" class="nav-item dropdown-trigger">
-                        <i class="fas fa-user-circle"></i> {{ user.email }}
+                        <i class="fas fa-user-circle"></i> {{ auth.getSignedInUser() ? auth.getSignedInUser().email : 'Non connecté' }}
                         <i class="fas fa-chevron-down dropdown-arrow"></i>
                     </a>
                     <div class="dropdown-menu">
@@ -72,18 +72,17 @@
     <div class="footer-container">
         <div class="footer-content">
             <div class="footer-brand">
-
+                <p>&copy; {{ "now"|date("Y") }} La Chaudière Agenda. Tous droits réservés.</p>
             </div>
             <div class="footer-user-status">
                 Statut :
                 {% if auth.isAuthenticated() %}
-                    <span class="status-indicator connected"></span>
+                    <span class="status-indicator connected"></span> Connecté
                 {% else %}
-                    <span class="status-indicator disconnected"></span>
+                    <span class="status-indicator disconnected"></span> Déconnecté
                 {% endif %}
             </div>
         </div>
-        <p>&copy; {{ "now"|date("Y") }} La Chaudière Agenda. Tous droits réservés.</p>
     </div>
 </footer>
 
