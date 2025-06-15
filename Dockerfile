@@ -16,6 +16,7 @@ WORKDIR /var/www
 # Copier le code et installer les dépendances
 COPY . /var/www
 RUN composer install --no-dev --optimize-autoloader
+RUN composer update
 
 # Permissions (si nécessaire)
 RUN chown -R www-data:www-data /var/www

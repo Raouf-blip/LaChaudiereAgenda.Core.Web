@@ -75,6 +75,7 @@ services:
       - mysql-db
     networks:
       - sae.net
+    command: sh -c "composer update && php-fpm"
 
   web:
     image: nginx:alpine
