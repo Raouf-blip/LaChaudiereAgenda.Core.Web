@@ -16,10 +16,10 @@ INSERT INTO users (id, email, password_hash, role) VALUES
 
 -- Ajout d'images
 INSERT INTO images (id, name, url) VALUES
-(UUID(), 'concert-jazz.jpg',      'http://localhost:10000/img/concert-jazz.jpg'),
-(UUID(), 'theatre-absurde.jpg',   'http://localhost:10000/img/theatre-absurde.jpg'),
-(UUID(), 'expo-peinture.jpg',     'http://localhost:10000/img/expo-peinture.jpg'),
-(UUID(), 'conference-climat.jpg', 'http://localhost:10000/img/conference-climat.jpg');
+(UUID(), 'concert-jazz.jpg',      'http://docketu.iutnc.univ-lorraine.fr:10000/img/concert-jazz.jpg'),
+(UUID(), 'theatre-absurde.jpg',   'http://docketu.iutnc.univ-lorraine.fr:10000/img/theatre-absurde.jpg'),
+(UUID(), 'expo-peinture.jpg',     'http://docketu.iutnc.univ-lorraine.fr:10000/img/expo-peinture.jpg'),
+(UUID(), 'conference-climat.jpg', 'http://docketu.iutnc.univ-lorraine.fr:10000/img/conference-climat.jpg');
 
 -- Ajout d’événements
 INSERT INTO events (
