@@ -1,4 +1,4 @@
-const BASE_URL = "http://docketu.iutnc.univ-lorraine.fr:10000/api";
+const BASE_URL = "http://docketu.iutnc.univ-lorraine.fr:10200/api";
 
 export async function loadCategories() {
   try {
